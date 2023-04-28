@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, redirect, request, flash, jso
 from config import Config
 import secrets, sys
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from flask_login import LoginManager, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
@@ -16,15 +17,47 @@ print("flask application started.")
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(128), unique=True, nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    sessions = relationship('UserSession', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+class UserSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    login_time = db.Column(db.DateTime, default=func.now())
+    logout_time = db.Column(db.DateTime, nullable=True)
+    duration = db.Column(db.Integer, nullable=True)
+
+    user = relationship('User', back_populates='sessions')
+
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    # the types can be replaced with the actual types, specific question classes
+    question_type = db.Column(db.Enum('type 1', 'type 2', 'type 3', 'type 4'), nullable=False)
+    submitted_answer = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    question_answers = relationship('UserQuestionAnswer', back_populates='question')
+
+class UserQuestionAnswer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+    submitted_answer = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=func.now())
+
+    user = relationship('User', back_populates='question_answers')
+    question = relationship('Question', back_populates='question_answers')
+
 
 @app.before_first_request
 def create_tables():
