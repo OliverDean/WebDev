@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <title>OpenAI Quickstart</title>
+  <link
+    rel="shortcut icon"
+    href="{{ url_for('static', filename='dog.png') }}"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+
+<body>
+  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+  <h3>How do I even date? Help!</h3>
+  <!-- <form action="/" method="post"> -->
+  <form action="{{ url_for('dashboard') }}" method="post">
+    <input type="text" name="name" placeholder="What's their name?" required />
+    <input type="text" name="age" placeholder="Age" required />
+    <input type="text" name="sex" placeholder="Sex" required />
+    <input type="text" name="interests" placeholder="Interests" required />
+    <input type="text" name="nationality" placeholder="nationality" required />
+    <input type="text" name="humor_type" placeholder="Humor Type" required />
+    <input type="text" name="initialmeetingplace" placeholder="Where did you meet?" required />
+    <input type="submit" value="Generate response" />
+  </form>
+  {% if result %}
+  <div class="result">{{ result }}</div>
+  {% endif %}
+</body>
