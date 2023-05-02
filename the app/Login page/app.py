@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
-from flask_mail import Mail, Message
 from config import Config
 import secrets, sys
 from flask_sqlalchemy import SQLAlchemy
