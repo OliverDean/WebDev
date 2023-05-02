@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error {{ error_code }}</title>
+  <!-- Add your CSS link here -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Add your JavaScript/jQuery link here -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="form-container">
+    <div class="form-error">
+      <h1>Error {{ error_code }}</h1>
+      <p>{{ error_message }}</p>
+      <a href="/" class="btn-back">Go back to Home</a>
+    </div>
+  </div>
+</body>
+
+</html>
