@@ -1,28 +1,35 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>OpenAI Quickstart</title>
-  <link
-    rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
-  />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>Document</title>
 </head>
-
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>How do I even date? Help!</h3>
-  <!-- <form action="/" method="post"> -->
-  <form action="{{ url_for('dashboard') }}" method="post">
-    <input type="text" name="name" placeholder="What's their name?" required />
-    <input type="text" name="age" placeholder="Age" required />
-    <input type="text" name="sex" placeholder="Sex" required />
-    <input type="text" name="interests" placeholder="Interests" required />
-    <input type="text" name="nationality" placeholder="nationality" required />
-    <input type="text" name="humor_type" placeholder="Humor Type" required />
-    <input type="text" name="initialmeetingplace" placeholder="Where did you meet?" required />
-    <input type="submit" value="Generate response" />
-  </form>
-  {% if result %}
-  <div class="result">{{ result }}</div>
-  {% endif %}
+  <div id="center-text">
+  </div> 
+  <div id="body"> 
+    <div class="chat-box">
+      <div class="chat-box-header">
+        ChatBot
+      </div>
+      <div class="chat-box-body">
+        <div class="chat-box-overlay">   
+        </div>
+        <div class="chat-logs">
+        </div><!--chat-log -->
+      </div>
+      <div class="chat-input">      
+        <form>
+          <input type="text" id="chat-input" placeholder="Send a message..."/>
+        <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+        </form>      
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </body>
+</html>
