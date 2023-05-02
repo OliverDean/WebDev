@@ -7,10 +7,12 @@ from flask_login import LoginManager, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
 from main import get_openai_response
+from error import init_app_error
 
 print("starting flask application...")
 
 app = Flask(__name__)
+init_app_error(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
