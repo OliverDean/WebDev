@@ -131,6 +131,11 @@ def register():
 @app.route('/logout')
 @login_required
 def logout():
+    user_session = UserSession.query.filter_by(
+        user_id=session['user_id'], logout_time=None).first()
+    if user_session:
+        user_session.logout_time = func.now()
+        db.session.commit()
     logout_user()
     flash('You have been logged out.', category='success')
     return redirect(url_for('index'))
@@ -162,3 +167,7 @@ def dashboard():
         result = get_openai_response(name, age, sex, interests, nationality, humor_type, initialmeetingplace)
 
     return render_template('dashboard.html', result=result)
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
