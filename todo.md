@@ -30,6 +30,19 @@ Collect information from the user with the ultimate aim being using that informa
 
 
 
+Should we have a main app.py a login.py and a chat.py and a database.py?
 
+
+ installs list
+ 1. pip install flask
+ 2. pip install flask_sqlalchemy
+ 3. pip install flask_login
+ 4. pip install openai
+ 6. pip install dotenv
+ 7. pip install -r requirements.txt
+
+Potential chokepoints:
+Need to set up database before the chat sequence can develop because certain responses need to be 
+validated before an appropriate response can be given. Goal is to have 12 questions and responses.
 
 
