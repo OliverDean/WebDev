@@ -16,7 +16,7 @@ def start_chat():
     prompt = f"Return the initial statement:Hi, I'm Alice and we at Reli AI understand that dating is complicated. We want to help. What is your name?"
 
     response = openai.Completion.create(
-        model="text-davinci-003", # or whichever model you're using
+        model="text-curie-001", # or whichever model you're using
         prompt=prompt,
         max_tokens=500,
     )
@@ -34,7 +34,7 @@ def chat():
     prompt = user_message
 
     response = openai.Completion.create(
-        model="text-davinci-003",
+        model="text-curie-001",
         prompt=prompt,
         max_tokens=60,
     )
