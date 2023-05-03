@@ -152,23 +152,6 @@ if __name__ == '__main__':
     with app.app_context():
         app.run(debug=True)
 
-@app.route('/dashboard', methods=["GET", "POST"])
-@login_required
-def dashboard():
-    result = ""
-    if request.method == "POST":
-        name = request.form["name"]
-        age = request.form["age"]
-        sex = request.form["sex"]
-        interests = request.form["interests"]
-        nationality = request.form["nationality"]
-        humor_type = request.form["humor_type"]
-        initialmeetingplace = request.form["initialmeetingplace"]
-        
-        result = get_openai_response(name, age, sex, interests, nationality, humor_type, initialmeetingplace)
-
-    return render_template('dashboard.html', result=result)
-
 @app.route('/about')
 def about():
     return render_template('about.html')
