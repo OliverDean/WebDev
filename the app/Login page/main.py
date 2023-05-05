@@ -43,5 +43,11 @@ def chat():
         "message": response.choices[0].text.strip()
     })
 
+def get_openai_response(prompt):
+    # Your code for generating the response using the OpenAI API
+    pass
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)

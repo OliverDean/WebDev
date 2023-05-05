@@ -1,13 +1,20 @@
 from flask import render_template
-from app import app, db
+from . import app, db
 
+def init_app_error(app):
+    app.register_error_handler(404, not_found_error)
+    app.register_error_handler(500, lambda e: internal_error(e, app))
+    app.register_error_handler(403, forbidden_error)
+    app.register_error_handler(401, unauthorized_error)
+    app.register_error_handler(400, bad_request_error)
+    app.register_error_handler(405, method_not_allowed_error)
 
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html', error_code=404, error_message='Page not found'), 404
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error(error, _):
     db.session.rollback()
     return render_template('500.html', error_code=500, error_message='Internal server error'), 500
 
@@ -27,10 +34,4 @@ def bad_request_error(error):
 def method_not_allowed_error(error):
     return render_template('405.html', error_code=405, error_message='Method not allowed'), 405
 
-def init_app_error(app):
-    app.register_error_handler(404, not_found_error)
-    app.register_error_handler(500, lambda e: internal_error(e, app))
-    app.register_error_handler(403, forbidden_error)
-    app.register_error_handler(401, unauthorized_error)
-    app.register_error_handler(400, bad_request_error)
-    app.register_error_handler(405, method_not_allowed_error)
+

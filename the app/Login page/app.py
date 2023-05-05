@@ -1,18 +1,22 @@
 from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
-from config import Config
 import secrets, sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import LoginManager, UserMixin
+from sqlalchemy import func 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import current_user, login_user, logout_user, login_required
-from main import get_openai_response
-from error import init_app_error
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
+from datetime import datetime
+
+from . import app, db
+from .main import get_openai_response
+from .error import init_app_error
+from .config import Config 
 
 print("starting flask application...")
 
 app = Flask(__name__)
 init_app_error(app)
+print("error handler initialized.")
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
@@ -23,9 +27,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(128), unique=True, nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
-    created_at = db.Column(db.DateTime, default=func.now())
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     sessions = relationship('UserSession', back_populates='user')
+    question_answers = relationship('UserQuestionAnswer', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -62,9 +67,9 @@ class UserQuestionAnswer(db.Model):
     question = relationship('Question', back_populates='question_answers')
 
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
+#@app.before_first_request
+#def create_tables():
+#    db.create_all()
 
 
 @login_manager.user_loader
