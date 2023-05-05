@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
 import secrets, sys
 from flask_sqlalchemy import SQLAlchemy
+from requests import session
 from sqlalchemy.orm import relationship
 from sqlalchemy import func 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -155,9 +156,7 @@ def users():
     return render_template('users.html', users=all_users)
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        app.run(debug=True)
+
 
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
@@ -179,3 +178,18 @@ def dashboard():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/start', methods=['GET', 'POST'])
+def start():
+    # todo
+    return render_template('start.html')
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    # todo
+    return render_template('chat.html')
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        app.run(debug=True)

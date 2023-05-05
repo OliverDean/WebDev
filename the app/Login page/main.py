@@ -39,9 +39,9 @@ def chat():
     #    max_tokens=60,
     #)
 
-    return jsonify({
-        "message": response.choices[0].text.strip()
-    })
+    #return jsonify({
+    #    "message": response.choices[0].text.strip()
+    #})
 
 def get_openai_response(prompt):
     # Your code for generating the response using the OpenAI API

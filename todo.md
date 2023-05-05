@@ -39,6 +39,10 @@ Should we have a main app.py a login.py and a chat.py and a database.py?
  3. pip install flask_login
  4. pip install openai
  6. pip install dotenv
+    ###
+    pip uninstall dotenv
+    pip install python-dotenv
+    ###
  7. pip install -r requirements.txt
 
 Potential chokepoints:
@@ -46,3 +50,6 @@ Need to set up database before the chat sequence can develop because certain res
 validated before an appropriate response can be given. Goal is to have 12 questions and responses.
 
 
+app.route('/start') and app.route('/chat') both are called by the js
+along side we need a chat.html and start.html
+i think extends from a base html is the way to go
