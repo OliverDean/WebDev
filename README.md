@@ -19,3 +19,5 @@ login.html doesnt exist but is called by app.py might need to make a base case h
 ERROR in app: Exception on /login [GET]
 jinja2.exceptions.TemplateNotFound: login.html
 
+ive updated the requirements.txt
+pip install -r requirements.txt
