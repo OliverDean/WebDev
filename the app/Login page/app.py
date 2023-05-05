@@ -6,6 +6,7 @@ from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from datetime import datetime
+from flask_migrate import Migrate
 
 from . import app, db
 from .main import get_openai_response
@@ -19,6 +20,7 @@ init_app_error(app)
 print("error handler initialized.")
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 print("flask application started.")
 
