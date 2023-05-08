@@ -33,15 +33,21 @@ def chat():
     # For now, let's just use the user's message as the prompt
     prompt = user_message
 
-    response = openai.Completion.create(
-        model="text-curie-001",
-        prompt=prompt,
-        max_tokens=60,
-    )
+    #response = openai.Completion.create(
+    #    model="text-curie-001",
+    #    prompt=prompt,
+    #    max_tokens=60,
+    #)
 
-    return jsonify({
-        "message": response.choices[0].text.strip()
-    })
+    #return jsonify({
+    #    "message": response.choices[0].text.strip()
+    #})
+
+def get_openai_response(prompt):
+    # Your code for generating the response using the OpenAI API
+    pass
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

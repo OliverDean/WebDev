@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "C://Users/olive/OneDrive/Desktop/CompSci/2023 semester 1/cits3403 web dev/WebDevProject/WebDev/.venv/Scripts/python.exe",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
+}
