@@ -16,7 +16,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_wtf.csrf import CSRFProtect
 from flask_talisman import Talisman
 
-from .main import get_openai_response
+
 from .error import init_app_error
 from .config import Config
 
