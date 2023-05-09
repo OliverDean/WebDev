@@ -61,6 +61,96 @@ class UserModelTest(unittest.TestCase):
             db.session.add(user)
             db.session.commit()
 
+    def test_long_username(self):
+        """Test that creating a User with a long username fails."""
+        long_username = 'a' * 129  # create a string with 129 'a's
+        user = User(username=long_username, email='test@test.com')
+        user.set_password('password')
+        with self.assertRaises(Exception):
+            db.session.add(user)
+            db.session.commit()
+
+    def test_long_password(self):
+        """Test that creating a User with a long password succeeds."""
+        long_password = 'a' * 256  # create a string with 256 'a's
+        user = User(username='test', email='test@test.com')
+        user.set_password(long_password)
+        db.session.add(user)
+        db.session.commit()
+        assert user.check_password(long_password)
+
+    def test_non_printable_username(self):
+        """Test that creating a User with a non-printable username fails."""
+        user = User(username='\x00', email='test@test.com')  # '\x00' is a non-printable character
+        user.set_password('password')
+        with self.assertRaises(Exception):
+            db.session.add(user)
+            db.session.commit()
+
+    def test_non_printable_password(self):
+        """Test that creating a User with a non-printable password fails."""
+        user = User(username='test', email='test@test.com')
+        with self.assertRaises(ValueError):
+            user.set_password('\x00')  # '\x00' is a non-printable character
+
+    def test_create_user_without_username(self):
+        """Test that creating a User without a username fails."""
+        user = User(email='test@test.com')
+        user.set_password('password')
+        with self.assertRaises(Exception):
+            db.session.add(user)
+            db.session.commit()
+
+    def test_create_user_without_email(self):
+        """Test that creating a User without an email fails."""
+        user = User(username='test')
+        user.set_password('password')
+        with self.assertRaises(Exception):
+            db.session.add(user)
+            db.session.commit()
+
+    def test_create_user_without_password(self):
+        """Test that creating a User without a password fails."""
+        user = User(username='test', email='test@test.com')
+        with self.assertRaises(Exception):
+            db.session.add(user)
+            db.session.commit()
+
+    def test_set_password_after_creation(self):
+        """Test setting a password after User creation."""
+        user = User(username='test', email='test@test.com')
+        db.session.add(user)
+        db.session.commit()
+        user.set_password('password')
+        db.session.commit()
+        assert user.check_password('password')
+
+    def test_change_password(self):
+        """Test changing a User's password."""
+        user = User(username='test', email='test@test.com')
+        user.set_password('password')
+        db.session.add(user)
+        db.session.commit()
+        user.set_password('new_password')
+        db.session.commit()
+        assert user.check_password('new_password')
+
+    def test_check_password_with_different_case(self):
+        """Test that checking a password with different case returns False."""
+        user = User(username='test', email='test@test.com')
+        user.set_password('password')
+        db.session.add(user)
+        db.session.commit()
+        assert not user.check_password('PASSWORD')
+
+    def test_invalid_email(self):
+        """Test that creating a User with an invalid email format fails."""
+        user = User(username='test', email='invalid_email')
+        user.set_password('password')
+        with self.assertRaises(ValueError):
+            db.session.add(user)
+            db.session.commit()
+
 
 class UserSessionModelTest(unittest.TestCase):
     def setUp(self):

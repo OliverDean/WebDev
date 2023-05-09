@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
 from email_validator import validate_email, EmailNotValidError
+import string
 
 db = SQLAlchemy()
 
@@ -20,6 +21,8 @@ class User(UserMixin, db.Model):
     question_answers = relationship('UserQuestionAnswer', back_populates='user')
 
     def set_password(self, password):
+        if not all(c in string.printable for c in password):
+            raise ValueError("Password cannot contain non-printable characters.")
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
