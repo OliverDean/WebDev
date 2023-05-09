@@ -20,7 +20,7 @@ def internal_error(error, _):
 
 @app.errorhandler(403)
 def forbidden_error(error):
-    return render_template('error.html', error_code=403, error_message='Forbidden access'), 403
+    return render_template('error.html', error_code=403, error_message='Forbidden access \n\t\t\t you shall not pass!'), 403
 
 @app.errorhandler(401)
 def unauthorized_error(error):
