@@ -8,6 +8,8 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 from datetime import datetime
 from flask_migrate import Migrate
 
+import openai
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
@@ -108,7 +110,7 @@ def login():
             print('Login failed. Check your username and/or password.')
             return jsonify(status="error", message="Login failed. Check your username and/or password.")
            
-    return render_template('chatbot.html')
+    return redirect(url_for('chatbot'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -197,6 +199,49 @@ def about():
 
 
 
+@app.route('/chatbot')
+@login_required
+def chatbot_login():
+    #todo we need a specific about page for the app describing what it is and does
+    return render_template('chatbot.html')
+
+@app.route("/start", methods=["GET"])
+@login_required
+def start_chat():
+    prompt = f"Return the initial statement:Hi, I'm Alice and we at Reli AI understand that dating is complicated. We want to help. What is your name?"
+
+    response = openai.Completion.create(
+        model="text-curie-001", # or whichever model you're using
+        prompt=prompt,
+        max_tokens=500,
+    )
+
+    return jsonify({
+        "message": response.choices[0].text.strip()
+    })
+
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_message = request.json['message']
+
+    # Here, you should write the logic for generating a prompt based on the user's message
+    # For now, let's just use the user's message as the prompt
+    prompt = user_message
+
+    #response = openai.Completion.create(
+    #    model="text-curie-001",
+    #    prompt=prompt,
+    #    max_tokens=60,
+    #)
+
+    #return jsonify({
+    #    "message": response.choices[0].text.strip()
+    #})
+
+def get_openai_response(prompt):
+    # Your code for generating the response using the OpenAI API
+    pass
 
 if __name__ == '__main__':
     with app.app_context():
