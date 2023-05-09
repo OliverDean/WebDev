@@ -140,11 +140,6 @@ def users():
     return render_template('users.html', users=all_users)
 
 
-<<<<<<< HEAD
-if __name__ == '__main__':
-    with app.app_context():
-        app.run(debug=True)
-=======
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
 def dashboard():
@@ -163,7 +158,6 @@ def dashboard():
 
     return render_template('dashboard.html', result=result)
 
->>>>>>> 7109eefdab6b9fd7ff4532debd263392b5cf15ca
 
 @app.route('/about')
 def about():
