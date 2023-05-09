@@ -168,21 +168,35 @@ def users():
     all_users = User.query.all()
     return render_template('users.html', users=all_users)
 
+<<<<<<< HEAD
+=======
+
+@app.route('/dashboard', methods=["GET", "POST"])
+@login_required
+def dashboard():
+    result = ""
+    if request.method == "POST":
+        name = request.form["name"]
+        age = request.form["age"]
+        sex = request.form["sex"]
+        interests = request.form["interests"]
+        nationality = request.form["nationality"]
+        humor_type = request.form["humor_type"]
+        initialmeetingplace = request.form["initialmeetingplace"]
+
+        result = get_openai_response(
+            name, age, sex, interests, nationality, humor_type, initialmeetingplace)
+
+    return render_template('dashboard.html', result=result)
+
+
+>>>>>>> cc3da46afea3981e2bfa1ea8fedb4427cf22ab13
 @app.route('/about')
 def about():
+    #todo we need a specific about page for the app describing what it is and does
     return render_template('about.html')
 
 
-@app.route('/start', methods=['GET', 'POST'])
-def start():
-    # todo
-    return render_template('start.html')
-
-
-@app.route('/chat', methods=['GET', 'POST'])
-def chat():
-    # todo
-    return render_template('chat.html')
 
 
 if __name__ == '__main__':
