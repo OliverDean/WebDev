@@ -129,3 +129,27 @@ body {
   transition: all 0.3s ease;
 }
 
+
+.navbar {
+  background-color: #333;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.nav-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.nav-button:hover {
+  background-color: #45a049;
+}
