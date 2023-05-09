@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, request, flash, jso
 import secrets
 import sys
 from flask_sqlalchemy import SQLAlchemy
-from requests import session
+from flask import session
 from sqlalchemy import func
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from datetime import datetime
@@ -16,7 +16,11 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_wtf.csrf import CSRFProtect
 from flask_talisman import Talisman
 
-from .main import get_openai_response
+from werkzeug.exceptions import BadRequest
+
+from datetime import datetime
+
+
 from .error import init_app_error
 from .config import Config
 
@@ -63,12 +67,6 @@ def load_user(user_id):
 #     submit = SubmitField("Login")
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    print("load_user called")
-    return User.query.get(int(user_id))
-
-
 @app.route('/')
 def index():
     print('Index route called')
@@ -105,10 +103,14 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
+            session['user_id'] = user.id  # Store user_id in the session
+            new_session = UserSession(user_id=user.id)  # Create a new UserSession record
+            db.session.add(new_session)  # Add the new record to the session
+            db.session.commit()  # Commit the changes to the database
             return jsonify(status="success")
         else:
             print('Login failed. Check your username and/or password.')
-            return jsonify(status="error", message="Login failed. Check your username and/or password.")
+            raise BadRequest(jsonify(status="error", message="Login failed. Check your username and/or password."))
            
     return redirect(url_for('chatbot'))
 
@@ -138,28 +140,28 @@ def register():
         
         if password != confirm_password:
             print('Passwords do not match.')
-            return jsonify(status="error", message="Passwords do not match.")
+            raise BadRequest(jsonify(status="error", message="Passwords do not match."))
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is not None:
-            return jsonify(status="error", message="Username already exists.")
+            raise BadRequest(jsonify(status="error", message="Username already exists."))
         
         # Check for empty password
         if not password:
-            return jsonify(status="error", message="Password cannot be empty.")
+            raise BadRequest(jsonify(status="error", message="Password cannot be empty."))
 
         # Check for valid email format
         email_regex = r"[^@]+@[^@]+\.[^@]+"
         if not re.match(email_regex, email):
-            return jsonify(status="error", message="Invalid email format.")
+            raise BadRequest(jsonify(status="error", message="Invalid email format."))
 
         # Check for long username
         if len(username) > 64:
-            return jsonify(status="error", message="Username cannot be more than 64 characters.")
+            raise BadRequest(jsonify(status="error", message="Username cannot be more than 64 characters."))
 
         # Check for non-printable username
         if not all(c in string.printable for c in username):
-            return jsonify(status="error", message="Username cannot contain non-printable characters.")
+            raise BadRequest(jsonify(status="error", message="Username cannot contain non-printable characters."))
 
 
         user = User(username=username, email=email)
@@ -171,14 +173,20 @@ def register():
     return render_template('index.html')
 
 
+
 @app.route('/logout')
 @login_required
 def logout():
     user_session = UserSession.query.filter_by(
         user_id=session['user_id'], logout_time=None).first()
     if user_session:
-        user_session.logout_time = func.now()
+        user_session.logout_time = datetime.now()  # Record the logout time
         db.session.commit()
+
+        # Calculate the session duration in seconds
+        user_session.duration = (user_session.logout_time - user_session.login_time).total_seconds()
+        db.session.commit()
+        
     logout_user()
     flash('You have been logged out.', category='success')
     return redirect(url_for('index'))
