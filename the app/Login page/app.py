@@ -20,6 +20,8 @@ from .config import Config
 
 from .models import User, UserSession, UserQuestionAnswer, Question, db
 
+import re, string
+
 print("starting flask application...")
 
 app = Flask(__name__)
@@ -130,7 +132,7 @@ def register():
         email = request.form['email']
 
         print(
-            f"Received form data: username={username}, email={email}, password={password}")
+            f"Received form data: username={username}, email={email}, password={confirm_password}")
         
         if password != confirm_password:
             print('Passwords do not match.')
@@ -139,6 +141,24 @@ def register():
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is not None:
             return jsonify(status="error", message="Username already exists.")
+        
+        # Check for empty password
+        if not password:
+            return jsonify(status="error", message="Password cannot be empty.")
+
+        # Check for valid email format
+        email_regex = r"[^@]+@[^@]+\.[^@]+"
+        if not re.match(email_regex, email):
+            return jsonify(status="error", message="Invalid email format.")
+
+        # Check for long username
+        if len(username) > 64:
+            return jsonify(status="error", message="Username cannot be more than 64 characters.")
+
+        # Check for non-printable username
+        if not all(c in string.printable for c in username):
+            return jsonify(status="error", message="Username cannot contain non-printable characters.")
+
 
         user = User(username=username, email=email)
         user.set_password(password)
