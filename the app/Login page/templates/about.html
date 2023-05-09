@@ -1,18 +1,16 @@
-{% extends 'base.html' %}
-
-{% block title %}About page{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}About page{% endblock %} {% block
+head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}" />
+{% endblock %} {% block content %}
 <div id="about-page">
-    <h1>About Our Chatbot</h1>
-    <p>blah blah blah ai chatbot</p>
-</div>
-{% endblock %}
+  <h1>About Our Chatbot</h1>
+  <p>blah blah blah ai chatbot</p>
+  <p>blajh</p>
+  <h2>About the team</h2>
+    <p>blah blah blah</p>
+    <p>rrgr</p>
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='about.js') }}"></script>
+</div>
+{% endblock %} {% block scripts %}
+<!--<script src="{{ url_for('static', filename='about.js') }}"></script> -->
 {% endblock %}
