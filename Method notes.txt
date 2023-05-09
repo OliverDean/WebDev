@@ -1,0 +1,15 @@
+
+The code block `if __name__ == '__main__':` is a common pattern in Python that allows a module to be run as a standalone script or imported into another module.
+When the Python interpreter executes a script, it sets the special `__name__` variable to `'__main__'` indicating that this script is being run as the main program.
+In the case of a Flask application, the `app.run()` method is called to start the development server when the script is run as the main program.
+The `with app.app_context():` statement is used to create an application context, which is required to access Flask extensions and resources within the application.
+Finally, the `debug=True` parameter enables debug mode for the Flask application, which provides more detailed error messages and other debugging features.
+
+This route is used to handle registration requests from users who want to sign up for the website.
+The first line of the function, @app.route('/register', methods=['GET', 'POST']), defines the URL path for the route, in this case "/register". 
+The methods argument specifies which HTTP methods this route should handle - in this case, both GET and POST requests are accepted.
+The code block checks if the user is already authenticated by checking if current_user.is_authenticated is True. If the user is authenticated, they are redirected to the index page using return redirect(url_for('index')).
+If the user is not authenticated, the code block proceeds to check if the request method is a POST. 
+If it is, the user's registration information is extracted from the form and used to create a new User object, which is then added to the database using SQLAlchemy. 
+If the registration is successful, the function returns a success message.
+If the request method is a GET, the function renders the registration page template using render_template('register.html').
