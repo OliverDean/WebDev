@@ -43,20 +43,20 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class RegistrationForm(FlaskForm):
-    username = StringField("Username", validators=[
-                           DataRequired(), Length(min=2, max=128)])
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    confirm_password = PasswordField("Confirm Password", validators=[
-                                     DataRequired(), EqualTo("password")])
-    submit = SubmitField("Sign Up")
+# class RegistrationForm(FlaskForm):
+#     username = StringField("Username", validators=[
+#                            DataRequired(), Length(min=2, max=128)])
+#     email = StringField("Email", validators=[DataRequired(), Email()])
+#     password = PasswordField("Password", validators=[DataRequired()])
+#     confirm_password = PasswordField("Confirm Password", validators=[
+#                                      DataRequired(), EqualTo("password")])
+#     submit = SubmitField("Sign Up")
 
 
-class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Login")
+# class LoginForm(FlaskForm):
+#     username = StringField("Username", validators=[DataRequired()])
+#     password = PasswordField("Password", validators=[DataRequired()])
+#     submit = SubmitField("Login")
 
 
 @login_manager.user_loader
@@ -70,15 +70,33 @@ def index():
     print('Index route called')
     return render_template('index.html')
 
+# Might consider this implemtation later
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     print("Login route called")
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         print('Login route - POST method')
+#         username = form.username.data
+#         password = form.password.data
+#         user = User.query.filter_by(username=username).first()
+
+#         if user and user.check_password(password):
+#             login_user(user)
+#             return jsonify(status="success")
+#         else:
+#             print('Login failed. Check your username and/or password.')
+#             return jsonify(status="error", message="Login failed. Check your username and/or password.")
+#     return render_template('dashboard.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     print("Login route called")
-    form = LoginForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         print('Login route - POST method')
-        username = form.username.data
-        password = form.password.data
+        username = request.form['login-username']
+        password = request.form['login-password']
         user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
@@ -87,8 +105,8 @@ def login():
         else:
             print('Login failed. Check your username and/or password.')
             return jsonify(status="error", message="Login failed. Check your username and/or password.")
-    return render_template('dashboard.html', form=form)
-
+           
+    return render_template('chatbot.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,15 +115,26 @@ def register():
         print("Register route - user already authenticated")
         return redirect(url_for('index'))
 
-    form = RegistrationForm()
-    if form.validate_on_submit():
+    # form = RegistrationForm()
+    # if form.validate_on_submit():
+    #     print("Register route - POST method")
+    #     username = form.username.data
+    #     password = form.password.data
+    #     email = form.email.data
+
+    if request.method == 'POST':
         print("Register route - POST method")
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        email = request.form['email']
 
         print(
             f"Received form data: username={username}, email={email}, password={password}")
+        
+        if password != confirm_password:
+            print('Passwords do not match.')
+            return jsonify(status="error", message="Passwords do not match.")
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is not None:
@@ -117,7 +146,7 @@ def register():
         db.session.commit()
         print("User registered")
         return jsonify(status="success")
-    return render_template('index.html', form=form)
+    return render_template('index.html')
 
 
 @app.route('/logout')
@@ -138,32 +167,6 @@ def logout():
 def users():
     all_users = User.query.all()
     return render_template('users.html', users=all_users)
-
-
-<<<<<<< HEAD
-if __name__ == '__main__':
-    with app.app_context():
-        app.run(debug=True)
-=======
-@app.route('/dashboard', methods=["GET", "POST"])
-@login_required
-def dashboard():
-    result = ""
-    if request.method == "POST":
-        name = request.form["name"]
-        age = request.form["age"]
-        sex = request.form["sex"]
-        interests = request.form["interests"]
-        nationality = request.form["nationality"]
-        humor_type = request.form["humor_type"]
-        initialmeetingplace = request.form["initialmeetingplace"]
-
-        result = get_openai_response(
-            name, age, sex, interests, nationality, humor_type, initialmeetingplace)
-
-    return render_template('dashboard.html', result=result)
-
->>>>>>> 7109eefdab6b9fd7ff4532debd263392b5cf15ca
 
 @app.route('/about')
 def about():

@@ -21,3 +21,7 @@ jinja2.exceptions.TemplateNotFound: login.html
 
 ive updated the requirements.txt
 pip install -r requirements.txt
+
+Helpful commands
+---
+python -m pip freeze | out-file requirements.txt
