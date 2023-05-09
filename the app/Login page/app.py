@@ -26,7 +26,8 @@ from .config import Config
 
 from .models import User, UserSession, UserQuestionAnswer, Question, db
 
-import re, string
+import re
+import string
 
 print("starting flask application...")
 
@@ -92,6 +93,7 @@ def index():
 #             return jsonify(status="error", message="Login failed. Check your username and/or password.")
 #     return render_template('dashboard.html', form=form)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     print("Login route called")
@@ -104,15 +106,18 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             session['user_id'] = user.id  # Store user_id in the session
-            new_session = UserSession(user_id=user.id)  # Create a new UserSession record
+            # Create a new UserSession record
+            new_session = UserSession(user_id=user.id)
             db.session.add(new_session)  # Add the new record to the session
             db.session.commit()  # Commit the changes to the database
             return jsonify(status="success")
         else:
             print('Login failed. Check your username and/or password.')
-            raise BadRequest(jsonify(status="error", message="Login failed. Check your username and/or password."))
-           
+            raise BadRequest(jsonify(
+                status="error", message="Login failed. Check your username and/or password."))
+
     return redirect(url_for('chatbot'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -137,32 +142,37 @@ def register():
 
         print(
             f"Received form data: username={username}, email={email}, password={confirm_password}")
-        
+
         if password != confirm_password:
             print('Passwords do not match.')
-            raise BadRequest(jsonify(status="error", message="Passwords do not match."))
+            raise BadRequest(
+                jsonify(status="error", message="Passwords do not match."))
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is not None:
-            raise BadRequest(jsonify(status="error", message="Username already exists."))
-        
+            raise BadRequest(
+                jsonify(status="error", message="Username already exists."))
+
         # Check for empty password
         if not password:
-            raise BadRequest(jsonify(status="error", message="Password cannot be empty."))
+            raise BadRequest(
+                jsonify(status="error", message="Password cannot be empty."))
 
         # Check for valid email format
         email_regex = r"[^@]+@[^@]+\.[^@]+"
         if not re.match(email_regex, email):
-            raise BadRequest(jsonify(status="error", message="Invalid email format."))
+            raise BadRequest(
+                jsonify(status="error", message="Invalid email format."))
 
         # Check for long username
         if len(username) > 64:
-            raise BadRequest(jsonify(status="error", message="Username cannot be more than 64 characters."))
+            raise BadRequest(
+                jsonify(status="error", message="Username cannot be more than 64 characters."))
 
         # Check for non-printable username
         if not all(c in string.printable for c in username):
-            raise BadRequest(jsonify(status="error", message="Username cannot contain non-printable characters."))
-
+            raise BadRequest(jsonify(
+                status="error", message="Username cannot contain non-printable characters."))
 
         user = User(username=username, email=email)
         user.set_password(password)
@@ -171,7 +181,6 @@ def register():
         print("User registered")
         return jsonify(status="success")
     return render_template('index.html')
-
 
 
 @app.route('/logout')
@@ -184,9 +193,10 @@ def logout():
         db.session.commit()
 
         # Calculate the session duration in seconds
-        user_session.duration = (user_session.logout_time - user_session.login_time).total_seconds()
+        user_session.duration = (
+            user_session.logout_time - user_session.login_time).total_seconds()
         db.session.commit()
-        
+
     logout_user()
     flash('You have been logged out.', category='success')
     return redirect(url_for('index'))
@@ -199,19 +209,18 @@ def users():
     return render_template('users.html', users=all_users)
 
 
-
 @app.route('/about')
 def about():
-    #todo we need a specific about page for the app describing what it is and does
+    # todo we need a specific about page for the app describing what it is and does
     return render_template('about.html')
-
 
 
 @app.route('/chatbot')
 @login_required
 def chatbot_login():
-    #todo we need a specific about page for the app describing what it is and does
+    # todo we need a specific about page for the app describing what it is and does
     return render_template('chatbot.html')
+
 
 @app.route("/start", methods=["GET"])
 @login_required
@@ -219,7 +228,7 @@ def start_chat():
     prompt = f"Return the initial statement:Hi, I'm Alice and we at Reli AI understand that dating is complicated. We want to help. What is your name?"
 
     response = openai.Completion.create(
-        model="text-curie-001", # or whichever model you're using
+        model="text-curie-001",  # or whichever model you're using
         prompt=prompt,
         max_tokens=500,
     )
@@ -237,19 +246,21 @@ def chat():
     # For now, let's just use the user's message as the prompt
     prompt = user_message
 
-    #response = openai.Completion.create(
+    # response = openai.Completion.create(
     #    model="text-curie-001",
     #    prompt=prompt,
     #    max_tokens=60,
-    #)
+    # )
 
-    #return jsonify({
+    # return jsonify({
     #    "message": response.choices[0].text.strip()
-    #})
+    # })
+
 
 def get_openai_response(prompt):
     # Your code for generating the response using the OpenAI API
     pass
+
 
 if __name__ == '__main__':
     with app.app_context():
