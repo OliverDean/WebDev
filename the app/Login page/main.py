@@ -25,23 +25,7 @@ def start_chat():
         "message": response.choices[0].text.strip()
     })
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    user_message = request.json['message']
 
-    # Here, you should write the logic for generating a prompt based on the user's message
-    # For now, let's just use the user's message as the prompt
-    prompt = user_message
-
-    #response = openai.Completion.create(
-    #    model="text-curie-001",
-    #    prompt=prompt,
-    #    max_tokens=60,
-    #)
-
-    #return jsonify({
-    #    "message": response.choices[0].text.strip()
-    #})
 
 def get_openai_response(prompt):
     # Your code for generating the response using the OpenAI API

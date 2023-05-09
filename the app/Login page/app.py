@@ -170,7 +170,6 @@ def users():
 
 
 
-
 @app.route('/about')
 def about():
     #todo we need a specific about page for the app describing what it is and does
