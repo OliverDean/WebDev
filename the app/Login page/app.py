@@ -161,19 +161,10 @@ def dashboard():
 
 @app.route('/about')
 def about():
+    #todo we need a specific about page for the app describing what it is and does
     return render_template('about.html')
 
 
-@app.route('/start', methods=['GET', 'POST'])
-def start():
-    # todo
-    return render_template('start.html')
-
-
-@app.route('/chat', methods=['GET', 'POST'])
-def chat():
-    # todo
-    return render_template('chat.html')
 
 
 if __name__ == '__main__':
