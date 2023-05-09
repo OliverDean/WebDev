@@ -6,10 +6,12 @@ and
 Nick 
 
 for the database 
-pip install Flask-Migrate
+    pip install Flask-Migrate   should be done in the requirements.txt
+
+manage.py is for database updating and merging 
 if you dont see the app.db in the Login page directory then 
 flask db init
-if it is there but doesnt work try
+    if it is there but doesnt work try
 flask db migrate -m "test"
 flask db upgrade
 
@@ -22,11 +24,22 @@ jinja2.exceptions.TemplateNotFound: login.html
 ive updated the requirements.txt
 pip install -r requirements.txt
 
+
 need to flesh out these
 
 
-the purpose of the web application, explaining the its design and use.
-the architecture of the web application.
-describe how to launch the web application.
-describe some unit tests for the web application, and how to run them.
-Include commit logs, showing contributions and review from both contributing students
+_the purpose of the web application, explaining the its design and use._
+
+
+_the architecture of the web application._
+
+
+_describe how to launch the web application._
+
+
+_describe some unit tests for the web application, and how to run them._
+
+
+_Include commit logs, showing contributions and review from both contributing students_
+
+
