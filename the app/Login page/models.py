@@ -4,6 +4,7 @@ from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
+from email_validator import validate_email, EmailNotValidError
 
 db = SQLAlchemy()
 
@@ -23,6 +24,16 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def set_email(self, email):
+        try:
+            v = validate_email(email)  # validate and get info
+            email = v["email"]  # replace with normalized form
+            self.email = email
+        except EmailNotValidError as e:
+            # email is not valid, exception message is human-readable
+            print(str(e))
+            raise ValueError("Invalid email format")
     
 class UserSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
