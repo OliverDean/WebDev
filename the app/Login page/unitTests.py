@@ -2,6 +2,7 @@
 from models import db, User, UserSession, Question, UserQuestionAnswer
 import unittest
 from create_app import create_app
+import json
 
 class UserModelTest(unittest.TestCase):
     # executed prior to each test
@@ -18,24 +19,37 @@ class UserModelTest(unittest.TestCase):
 
     def test_create_user(self):
         """Test the creation of a User."""
-        user = User(username='test', email='test@test.com')
-        user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
-        assert user in db.session
-        assert user.check_password('password')
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                username='test',
+                email='test@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            self.assertEqual(response.status_code, 200)
 
     def test_unique_username(self):
         """Test that creating a User with an existing username fails."""
-        user1 = User(username='test', email='test1@test.com')
-        user1.set_password('password')
-        db.session.add(user1)
-        db.session.commit()
-        user2 = User(username='test', email='test2@test.com')
-        user2.set_password('password')
-        with self.assertRaises(Exception):
-            db.session.add(user2)
-            db.session.commit()
+        with self.app.test_client() as c:
+            # First registration should succeed
+            response1 = c.post('/register', data=dict(
+                username='test',
+                email='test1@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            self.assertEqual(response1.status_code, 200)
+            # Second registration with the same username should fail
+            response2 = c.post('/register', data=dict(
+                username='test',
+                email='test2@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            data = json.loads(response2.data)
+            self.assertEqual(response2.status_code, 400)
+            self.assertEqual(data['status'], "error")
+            self.assertEqual(data['message'], "Username already exists.")
 
     def test_check_wrong_password(self):
         """Test that checking a wrong password returns False."""
@@ -47,45 +61,74 @@ class UserModelTest(unittest.TestCase):
 
     def test_invalid_email(self):
         """Test that creating a User with an invalid email format fails."""
-        user = User(username='test', email='invalid-email')
-        user.set_password('password')
-        with self.assertRaises(ValueError):
-            db.session.add(user)
-            db.session.commit()
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                username='test',
+                email='invalid-email',
+                password='password',
+                confirm_password='password'
+            ))
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(data['status'], "error")
+            self.assertEqual(data['message'], "Invalid email format.")
 
     def test_missing_username(self):
         """Test that creating a User without a username fails."""
-        user = User(email='test@test.com')
-        user.set_password('password')
-        with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                email='test@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(data['status'], "error")
 
     def test_long_username(self):
         """Test that creating a User with a long username fails."""
         long_username = 'a' * 129  # create a string with 129 'a's
-        user = User(username=long_username, email='test@test.com')
-        user.set_password('password')
-        with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                username=long_username,
+                email='test@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(data['status'], "error")
+            self.assertEqual(data['message'], "Username cannot be more than 64 characters.")
+
 
     def test_long_password(self):
-        """Test that creating a User with a long password succeeds."""
-        long_password = 'a' * 256  # create a string with 256 'a's
-        user = User(username='test', email='test@test.com')
-        user.set_password(long_password)
-        db.session.add(user)
-        db.session.commit()
-        assert user.check_password(long_password)
+        """Test that creating a User with a long password fails."""
+        long_password = 'a' * 257  # create a string with 256 'a's
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                username='test',
+                email='test@test.com',
+                password=long_password,
+                confirm_password=long_password
+            ))
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(data['status'], "error")
+            self.assertEqual(data['message'], "Password cannot be more than 256 characters.")
 
     def test_non_printable_username(self):
-        """Test that creating a User with a non-printable username fails."""
-        user = User(username='\x00', email='test@test.com')  # '\x00' is a non-printable character
-        user.set_password('password')
-        with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+        """Test that creating a User with a non-printable username raises an exception."""
+        with self.app.test_client() as c:
+            response = c.post('/register', data=dict(
+                username='test\x00',
+                email='test@test.com',
+                password='password',
+                confirm_password='password'
+            ))
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 400) # 400 for BadRequest
+            self.assertEqual(data['status'], "error")
+
 
     def test_non_printable_password(self):
         """Test that creating a User with a non-printable password fails."""

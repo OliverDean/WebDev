@@ -19,7 +19,7 @@ $(document).ready(function () {
         console.log("Received response:", response);
         if (response.status === "success") {
           alert("Registration successful!");
-          window.location.href = "/login";
+          window.location.href = "/";
         } else {
           alert(response.message);
         }
