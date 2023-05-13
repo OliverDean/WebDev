@@ -4,17 +4,72 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <title>Document</title>
+  <title>Chatbot</title>
 </head>
 <body>
-  <nav class="navbar">
+  <!-- <nav class="navbar">
     <a class="nav-button" href="/logout">Logout</a>
     <a class="nav-button" href="/users">Users</a>
     <a class="nav-button" href="/index">Index</a>
     <a class="nav-button" href="/history">History</a>
-  </nav>
+  </nav> -->
+
+  <button class="sidebar-toggle">
+    <i class="fas fa-bars"></i>
+  </button>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <button class="close-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <!-- links -->
+    <ul class="links">
+      <li>
+        <a href="/history">History</a>
+      </li>
+      <li>
+        <a href="/users">Users</a>
+      </li>
+      <li>
+        <a href="/index">Index</a>
+      </li>
+      <li>
+        <a href="/logout">Logout</a>
+      </li>
+    </ul>
+    <!-- social media -->
+    <ul class="social-icons">
+      <li>
+        <a href="https://www.twitter.com">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.twitter.com">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.twitter.com">
+          <i class="fab fa-behance"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.twitter.com">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.twitter.com">
+          <i class="fab fa-sketch"></i>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
   <div id="center-text">
   </div> 
   <div id="body"> 
@@ -27,15 +82,27 @@
         </div>
         <div class="chat-logs">
         </div><!--chat-log -->
+        <div class="file-drop-area" id="file-drop-area" style="display: none;">
+          <p>Drag and drop your files here</p>
+          <input type="file" id="file-upload" multiple>
+        </div>
       </div>
       <div class="chat-input">      
         <form>
           <input type="text" id="chat-input" placeholder="Send a message..."/>
-        <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+          <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
         </form>      
       </div>
     </div>
   </div>
   <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      var state = "{{ session.get('state') }}";
+      if (state === "question_2") {
+        $("#file-drop-area").show();
+      }
+    });
+  </script>
 </body>
 </html>
