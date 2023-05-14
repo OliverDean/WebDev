@@ -27,29 +27,59 @@ Collect information from the user with the ultimate aim being using that informa
  How do i gamify this experience?
  Story and art? Avatars?
  Should I have a conversation starter? 
+ What would be a good parental gate?
+ intent recognition, NLU accuracy, predictive and semantic capabilities?
 
 
 
 Should we have a main app.py a login.py and a chat.py and a database.py?
 
 
- installs list
- 1. pip install flask
- 2. pip install flask_sqlalchemy
- 3. pip install flask_login
- 4. pip install openai
- 6. pip install dotenv
-    ###
-    pip uninstall dotenv
-    pip install python-dotenv
-    ###
- 7. pip install -r requirements.txt
-
+--
 Potential chokepoints:
 Need to set up database before the chat sequence can develop because certain responses need to be 
 validated before an appropriate response can be given. Goal is to have 12 questions and responses.
-
+----
 
 app.route('/start') and app.route('/chat') both are called by the js
 along side we need a chat.html and start.html
 i think extends from a base html is the way to go
+
+Chat logic/collecting information from the user
+--
+Does the chat logic depend on the database? yes it depends on the session state: session["state"] and other session variables.
+----
+
+--
+Holism:
+How should fundamental differences between men and women be reflected in the software?
+What questions define you as a person in the context of a relationship/long term relationship?
+What sort of feedback should I get from the user experience?
+What problems are most suitable to be solved by this app/apps in the context of finding and maintaining a relationship?
+Relationships are difficult to maintain, why?
+
+----
+
+--
+Practical todos:
+clearing whitespace when logging in
+When user navigates away from the page a popup should come up saying you have been logged out. 
+Can't figure out how to make the chatbox scroll to the bottom
+----
+
+--
+Photo upload:
+User Interface: Create a user interface that allows users to select and upload photos. You can use HTML and JavaScript to implement a file upload input field where users can browse and select their photos.
+
+Backend Handling: Once the user uploads a photo, your backend server (implemented using a framework like Flask) needs to handle the incoming request and process the uploaded photo. You can use a library like Flask-Uploads to handle file uploads in Flask.
+
+Photo Processing: After receiving the uploaded photo, you can use image processing libraries like OpenCV or PIL to perform any necessary processing tasks. For example, you may want to resize the image, apply filters, or extract certain features from the photo.
+
+Incorporate into Chatbot Logic: Integrate the uploaded photo into your chatbot's logic. Depending on the purpose of the photo upload, you can use the processed photo as input for further analysis or personalize the chatbot's responses based on the user's photo.
+
+Privacy and Security: Ensure that you handle user photos securely and respect privacy concerns. Implement measures such as secure file storage, encryption, and compliance with data protection regulations.
+
+Feedback and Interactions: Consider providing feedback to the user about the uploaded photo. You can use image recognition algorithms or APIs to analyze the photo and provide relevant responses or recommendations based on the content of the photo.
+----
+
+
