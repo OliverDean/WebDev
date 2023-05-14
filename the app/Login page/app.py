@@ -111,11 +111,10 @@ def login():
             new_session = UserSession(user_id=user.id)
             db.session.add(new_session)  # Add the new record to the session
             db.session.commit()  # Commit the changes to the database
-            return jsonify(status="success")
+            return jsonify(status="success", message="Login successful."), 200
         else:
             print('Login failed. Check your username and/or password.')
-            raise BadRequest(jsonify(
-                status="error", message="Login failed. Check your username and/or password."))
+            return jsonify(status="error", message="Login failed. Check your username and/or password."), 400
 
     return redirect(url_for('chatbot'))
 
@@ -146,41 +145,36 @@ def register():
 
         if password != confirm_password:
             print('Passwords do not match.')
-            raise BadRequest(
-                jsonify(status="error", message="Passwords do not match."))
+            return jsonify(status="error", message="Passwords do not match."), 400
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user is not None:
-            raise BadRequest(
-                jsonify(status="error", message="Username already exists."))
+            print('Username already exists.')   
+            return jsonify(status="error", message="Username already exists."), 400
 
         # Check for empty password
         if not password:
-            raise BadRequest(
-                jsonify(status="error", message="Password cannot be empty."))
+            return jsonify(status="error", message="Password cannot be empty."), 400
 
         # Check for valid email format
         email_regex = r"[^@]+@[^@]+\.[^@]+"
         if not re.match(email_regex, email):
-            raise BadRequest(
-                jsonify(status="error", message="Invalid email format."))
+            return jsonify(status="error", message="Invalid email format."), 400
 
         # Check for long username
         if len(username) > 64:
-            raise BadRequest(
-                jsonify(status="error", message="Username cannot be more than 64 characters."))
+            return jsonify(status="error", message="Username cannot be more than 64 characters."), 400
 
         # Check for non-printable username
         if not all(c in string.printable for c in username):
-            raise BadRequest(jsonify(
-                status="error", message="Username cannot contain non-printable characters."))
+            return jsonify(status="error", message="Username cannot contain non-printable characters."), 400
 
         user = User(username=username, email=email)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         print("User registered")
-        return jsonify(status="success")
+        return jsonify(status="success", message="User registered."), 200
     return render_template('index.html')
 
 
