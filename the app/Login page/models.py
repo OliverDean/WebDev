@@ -6,8 +6,9 @@ from flask_login import UserMixin
 from datetime import datetime
 from email_validator import validate_email, EmailNotValidError
 import string
+from .extensions import db
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
@@ -51,7 +52,7 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # the types can be replaced with the actual types, specific question classes
     question_type = db.Column(db.Enum('type 1', 'type 2', 'type 3', 'type 4'), nullable=False)
-    submitted_answer = db.Column(db.Text, nullable=False)
+    question_text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=func.now())
 
     question_answers = relationship('UserQuestionAnswer', back_populates='question')

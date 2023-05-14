@@ -1,14 +1,8 @@
-"""empty message
+"""test
 
-<<<<<<<< HEAD:the app/Login page/migrations/versions/1efeeddc7d2e_test.py
-Revision ID: 1efeeddc7d2e
+Revision ID: eb14a05ef754
 Revises: 
-Create Date: 2023-05-11 11:54:19.367185
-========
-Revision ID: 0f33cb99406c
-Revises: 
-Create Date: 2023-05-11 11:57:25.079717
->>>>>>>> d4ff905a54a45bf0b777d296cbb262ece31901e3:the app/Login page/migrations/versions/0f33cb99406c_.py
+Create Date: 2023-05-15 00:55:01.524167
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:the app/Login page/migrations/versions/1efeeddc7d2e_test.py
-revision = '1efeeddc7d2e'
-========
-revision = '0f33cb99406c'
->>>>>>>> d4ff905a54a45bf0b777d296cbb262ece31901e3:the app/Login page/migrations/versions/0f33cb99406c_.py
+revision = 'eb14a05ef754'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +21,7 @@ def upgrade():
     op.create_table('question',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('question_type', sa.Enum('type 1', 'type 2', 'type 3', 'type 4'), nullable=False),
+    sa.Column('question_text', sa.Text(), nullable=False),
     sa.Column('submitted_answer', sa.Text(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')

@@ -19,7 +19,7 @@
       </div>
       <div class="form-content">
         <form action="/login" method="POST" id="login-form">
-          {{ form.csrf_token }}
+
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="login-username" name="login-username" required="required">
@@ -49,7 +49,7 @@
       </div>
       <div class="form-content">
         <form action="/register" method="POST" id="register-form">
-          {{ form.csrf_token }}
+
           <div class="form-group">
             <label for="username">Username
             </label>
@@ -85,7 +85,7 @@
   </div>
   <div class="form-content">
     <form action="/forgot_password" method="POST" id="forgot-password-form">
-      {{ form.csrf_token }}
+
       <div class="form-group">
         <label for="email">Email Address</label>
         <input type="email" id="forgot-password-email" name="email" required="required">

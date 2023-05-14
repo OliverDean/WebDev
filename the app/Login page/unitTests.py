@@ -1,8 +1,11 @@
 
-from models import db, User, UserSession, Question, UserQuestionAnswer
+from models import User, UserSession, Question, UserQuestionAnswer
 import unittest
-from create_app import create_app
+from flask_sqlalchemy import SQLAlchemy
+from app import create_app, db
 import json
+
+
 
 class UserModelTest(unittest.TestCase):
     # executed prior to each test
