@@ -13,7 +13,7 @@ import re
 import string
 
 from .models import User, UserSession, UserQuestionAnswer, Question
-from .app import db
+from .app import db, login_manager
 
 
 
@@ -45,7 +45,7 @@ def login():
             print('Login failed. Check your username and/or password.')
             return jsonify(status="error", message="Login failed. Check your username and/or password."), 400
 
-    return redirect(url_for('chatbot'))
+    return redirect(url_for('chat'))
 
 
 @main_bp.route('/register', methods=['GET', 'POST'])
@@ -101,7 +101,7 @@ def register():
 
 
 @main_bp.route('/logout')
-#@login_required
+@login_required
 def logout():
     user_session = UserSession.query.filter_by(
         user_id=session['user_id'], logout_time=None).first()
@@ -162,6 +162,7 @@ def start_chat():
 
 
 @main_bp.route("/chat", methods=["POST"])
+@login_required
 def chat():
     user_message = request.json["message"].strip().capitalize()
     response = ""
@@ -226,40 +227,47 @@ def chat():
         else:
             response = "Please answer with 'yes' or 'no'"
 
-    # elif session.get("state") and session.get("state").startswith("question_"):
-    #     # Extract the question number
-    #     question_number = int(session.get("state").split("_")[1])
-    #     print(f"debug 1 - question_number: {question_number}, state: {session.get('state')}")
+    elif session.get("state") and session.get("state").startswith("question_"):
+        # Extract the question number
+        question_number = int(session.get("state").split("_")[1])
+        print(f"debug 1 - question_number: {question_number}, state: {session.get('state')}")
 
-    #     # Fetch the current question from the database
-    #     question = Question.query.get(question_number)
+        # Fetch the current question from the database
+        question = Question.query.get(question_number)
 
-    #     if question:
-    #         print(f"debug 2 - question: {question.question_text}")
-    #         # Save the user's answer to the database
-    #         user_question_answer = UserQuestionAnswer(user=current_user, question=question, submitted_answer=user_message)
-    #         db.session.add(user_question_answer)
-    #         db.session.commit()
+        if question:
+            print(f"debug 2 - question: {question.question_text}")
 
-    #         # Fetch the next question
-    #         next_question = Question.query.get(question_number + 1)
+            # Ensure the user is authenticated before saving their answer to the database
+            if current_user.is_authenticated:
+                # Save the user's answer to the database
+                user_question_answer = UserQuestionAnswer(user=current_user, question=question, submitted_answer=user_message)
+                db.session.add(user_question_answer)
+                db.session.commit()
+            else:
+                response = "You must be logged in to answer questions."
+                session["state"] = "session_end"
+                print("User not logged in.")
+                return jsonify({"message": response}), 400
 
-    #         if next_question:
-    #             # Ask the user the next question
-    #             response = next_question.question_text
-    #             session["state"] = f"question_{question_number + 1}"
-    #             print(f"debug 3 - next_question: {next_question.question_text}")
-    #         else:
-    #             # No more questions
-    #             response = "Thank you for answering all the questions!"
-    #             session["state"] = "session_end"
-    #             print("debug 4 - no more questions")
-    #     else:
-    #         # The current question doesn't exist
-    #         response = "An error occurred. Please try again."
-    #         session["state"] = "session_end"
-    #         print("debug 5 - question does not exist")
+            # Fetch the next question
+            next_question = Question.query.get(question_number + 1)
 
+            if next_question:
+                # Ask the user the next question
+                response = next_question.question_text
+                session["state"] = f"question_{question_number + 1}"
+                print(f"debug 3 - next_question: {next_question.question_text}")
+            else:
+                # No more questions
+                response = "Thank you for answering all the questions!"
+                session["state"] = "session_end"
+                print("debug 4 - no more questions")
+        else:
+            # The current question doesn't exist
+            response = "An error occurred. Please try again."
+            session["state"] = "session_end"
+            print("debug 5 - question does not exist")
 
     elif session.get("state") == "question_1":
         if user_message.lower().strip() == "yes":
