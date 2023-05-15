@@ -101,7 +101,7 @@ def register():
 
 
 @main_bp.route('/logout')
-@login_required
+#@login_required
 def logout():
     user_session = UserSession.query.filter_by(
         user_id=session['user_id'], logout_time=None).first()
