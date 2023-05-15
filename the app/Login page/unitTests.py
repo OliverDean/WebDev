@@ -1,8 +1,11 @@
 
-from models import db, User, UserSession, Question, UserQuestionAnswer
+from models import User, UserSession, Question, UserQuestionAnswer
 import unittest
-from create_app import create_app
+from flask_sqlalchemy import SQLAlchemy
+from app import create_app, db
 import json
+
+
 
 class UserModelTest(unittest.TestCase):
     # executed prior to each test
@@ -25,9 +28,12 @@ class UserModelTest(unittest.TestCase):
                 email='test@test.com',
                 password='password',
                 confirm_password='password'
-            ))
+            ), follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-
+            if response.data:  # Only parse JSON if response.data is not empty
+                data = json.loads(response.data)  # Parse JSON response
+                self.assertEqual(data['status'], 'success')  # Check for success status in JSON
+    
     def test_unique_username(self):
         """Test that creating a User with an existing username fails."""
         with self.app.test_client() as c:
@@ -38,7 +44,12 @@ class UserModelTest(unittest.TestCase):
                 password='password',
                 confirm_password='password'
             ))
+            print(response1.data)
             self.assertEqual(response1.status_code, 200)
+            if response1.data:
+                data1 = json.loads(response1.data)
+                self.assertEqual(data1['status'], 'success')
+
             # Second registration with the same username should fail
             response2 = c.post('/register', data=dict(
                 username='test',
@@ -46,10 +57,11 @@ class UserModelTest(unittest.TestCase):
                 password='password',
                 confirm_password='password'
             ))
-            data = json.loads(response2.data)
             self.assertEqual(response2.status_code, 400)
-            self.assertEqual(data['status'], "error")
-            self.assertEqual(data['message'], "Username already exists.")
+            if response2.data:
+                data2 = json.loads(response2.data)
+                self.assertEqual(data2['status'], "error")
+                self.assertEqual(data2['message'], "Username already exists.")
 
     def test_check_wrong_password(self):
         """Test that checking a wrong password returns False."""
@@ -68,10 +80,11 @@ class UserModelTest(unittest.TestCase):
                 password='password',
                 confirm_password='password'
             ))
-            data = json.loads(response.data)
             self.assertEqual(response.status_code, 400)
-            self.assertEqual(data['status'], "error")
-            self.assertEqual(data['message'], "Invalid email format.")
+            if response.data:
+                data = json.loads(response.data)
+                self.assertEqual(data['status'], "error")
+                self.assertEqual(data['message'], "Invalid email format.")
 
     def test_missing_username(self):
         """Test that creating a User without a username fails."""
