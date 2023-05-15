@@ -21,7 +21,8 @@ $(function() {
     str += "</div>";
     $(".chat-logs").append(str);
     $("#cm-msg-"+INDEX).hide().fadeIn(300);
-    $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
+    $(".chat-logs").animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, "fast");
+
   }
   
 
@@ -106,6 +107,7 @@ $(document).on("click", "#age-input-submit", function() {
     });
 });
 });
+
 // Chatbot functionality end
 
 // Sidebar functionality start

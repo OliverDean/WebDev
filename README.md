@@ -55,3 +55,7 @@ _describe some unit tests for the web application, and how to run them._
 _Include commit logs, showing contributions and review from both contributing students_
 ___
 
+___
+Persistent bugs
+
+Sometimes venv will simply not activate no matter what you try. Delete and restore the venv folder from recycle bin. This is a bug with venv and not the code.

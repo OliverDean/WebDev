@@ -65,6 +65,7 @@ Practical todos:
 clearing whitespace when logging in
 When user navigates away from the page a popup should come up saying you have been logged out. 
 Can't figure out how to make the chatbox scroll to the bottom
+UX flows?
 ----
 
 --
