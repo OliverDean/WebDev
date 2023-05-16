@@ -1,63 +1,80 @@
 import time
+import random
+import string
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.keys import Keys
 
-# Set up the Selenium driver
-driver = webdriver.Chrome()
+# Define the number of test runs
+num_runs = 3
 
-# Currently having issues with locating the correct element via CSS selector
 
-# Open the application
-driver.get('http://localhost:5000/index')
+# Start the loop to run the test multiple times
+for i in range(num_runs):
+    start_time = time.time()  # Record the start time
 
-# Test registration functionality
-register_links = driver.find_elements(By.CSS_SELECTOR, 'a[href="/register"]')
-if len(register_links) > 0:
-    register_links[0].click()
+    # Set up the Selenium driver
+    driver = webdriver.Chrome()
+    wait = WebDriverWait(driver, 3)
 
-    username_input = driver.find_element(By.ID, 'register-username')
-    password_input = driver.find_element(By.ID, 'register-password')
-    confirm_password_input = driver.find_element(By.ID, 'confirm_password')
-    email_input = driver.find_element(By.ID, 'email')
 
-    username_input.send_keys('test_user')
-    password_input.send_keys('test_password')
-    confirm_password_input.send_keys('test_password')
-    email_input.send_keys('test@example.com')
+    # Open the application
+    driver.get("http://localhost:5000/")
+    random_string = ''.join(random.choices(string.digits, k=10))
 
-    driver.find_element(By.CSS_SELECTOR, '#register-form button[type="submit"]').click()
+    # Wait until the page is fully loaded
+    wait.until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
 
-    # Wait for the registration response
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'register-response')))
+    # Test registration functionality, this line took longer than all the rest of the code combined
+    register_form = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.form-panel.two:not(.active)')))
 
-    # Verify the registration response
-    register_response = driver.find_element(By.ID, 'register-response')
-    assert register_response.text == 'User registered.'
-else:
-    print("Register link not found.")
+    if register_form:
+        register_form.click()
+        username_input = driver.find_element(By.ID, 'register-username')
+        password_input = driver.find_element(By.ID, 'register-password')
+        confirm_password_input = driver.find_element(By.ID, 'confirm_password')
+        email_input = driver.find_element(By.ID, 'email')
 
-# Test login functionality
-login_links = driver.find_elements(By.CSS_SELECTOR, 'a[href="/login"]')
-if len(login_links) > 0:
-    login_links[0].click()
+        username_input.send_keys('test_user' + random_string)
+        password_input.send_keys('test_password' + random_string)
+        confirm_password_input.send_keys('test_password' + random_string)
+        email_input.send_keys('test' + random_string + '@example.com')
 
-    username_input = driver.find_element(By.ID, 'login-username')
-    password_input = driver.find_element(By.ID, 'login-password')
+        register_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[type="submit"]#register-button')))
 
-    username_input.send_keys('test_user')
-    password_input.send_keys('test_password')
-    password_input.send_keys(Keys.RETURN)
+        driver.execute_script("arguments[0].click();", register_button)
+        register_button.click()
+        # Wait for the alert to be present
+        WebDriverWait(driver, 3).until(EC.alert_is_present())
+        alert = Alert(driver)
+        alert.accept()
+    else:
+        print("Register link not found.")
 
-    # Wait for the login response
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'login-response')))
+    # Test login functionality
+    login_form = driver.find_element(By.CSS_SELECTOR, '.form-panel.one')
+    if login_form:
+        login_form.click()
 
-    # Verify the login response
-    login_response = driver.find_element(By.ID, 'login-response')
-    assert login_response.text == 'Login successful.'
-else:
-    print("Login link not found.")
+        username_input = driver.find_element(By.ID, 'login-username')
+        password_input = driver.find_element(By.ID, 'login-password')
 
-# Close the browser
-driver.quit()
+        username_input.send_keys('test_user' + random_string)
+        password_input.send_keys('test_password' + random_string)
+        password_input.send_keys(Keys.RETURN)
+
+        # Check if user is redirected to the homepage after login
+        WebDriverWait(driver, 3).until(EC.url_to_be('http://localhost:5000/chatbot'))
+        assert driver.current_url == 'http://localhost:5000/chatbot' , "User not redirected to chat after login"
+        # Close the browser
+        driver.quit()
+
+
+    end_time = time.time()  # Record the end time
+    duration = end_time - start_time  # Calculate the duration in seconds
+
+    print("Test run was successful! " + f"Test {i + 1} took {duration:.2f} seconds")
