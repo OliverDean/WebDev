@@ -5,23 +5,26 @@ $(function() {
 
   function generate_message(msg, type, buttons = []) {
     INDEX++;
-    var str = "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
-    str += "<span class=\"msg-avatar\">";
-    str += "</span>";
-    str += "<div class=\"cm-msg-text\">";
-    str += msg;
-    str += "</div>";
-    if (type === 'self' && buttons.length > 0) {
+    if (type==='self') {
+      var str = '<div class="messages_item messages_item_self">' + msg + "</div>";
+    }
+    if (type==='user') {
+      var str = '<div class="messages_item messages_item_user">' + msg + "</div>";
+    }
+    if (type==='image') {
+      var str = '<div class="messages_item_image"><img src="/static/images/Alicecat.png"></div>';
+    }
+    if (type==='button' && buttons.length > 0) {
       str += "<div class='button-group'>";
       for (var i = 0; i < buttons.length; i++) {
         str += "<button class='button' data-value='" + buttons[i] + "'>" + buttons[i] + "</button>";
       }
       str += "</div>";
     }
-    str += "</div>";
+    
     $(".chat-logs").append(str);
     $("#cm-msg-"+INDEX).hide().fadeIn(300);
-    $(".chat-logs").animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, "fast");
+    $(".chat-box-body").animate({ scrollTop: $(".chat-box-body")[0].scrollHeight}, 2500);
 
   }
   
@@ -45,7 +48,7 @@ $(function() {
         console.log("Response received: " + data.message);
         generate_message(data.message, 'self', data.buttons);
         handleDragDropArea(data.showDropArea);
-        $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
+        $(".chat-box-body").stop().animate({ scrollTop: $(".chat-box-body")[0].scrollHeight}, 1500);
       },
       error: function() {
         console.log("Error occurred while sending request");
@@ -56,10 +59,14 @@ $(function() {
   // Fetch initial message from the server
   $.get("/start")
     .done(function(data) {
+
       console.log("Initial message received: " + data.message);
+
+      generate_message(data.message, 'image', data.buttons);
       generate_message(data.message, 'self', data.buttons);
       handleDragDropArea(data.showDropArea);
-      $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
+
+      $(".chat-box-body").stop().animate({ scrollTop: $(".chat-box-body")[0].scrollHeight}, 10000);
     })
     .fail(function() {
       console.log("Error occurred while fetching initial message");

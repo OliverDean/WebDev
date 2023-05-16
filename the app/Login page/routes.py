@@ -139,25 +139,28 @@ def chatbot_login():
     return render_template('chatbot.html')
 
 
+# @main_bp.route("/start", methods=["GET"])
+# @login_required
+# def start_chat():
+   
+
+#     session.clear()  # clear the session at the start of each chat
+#     session["state"] = "get_name"  # set the initial state
+#     response = { "/static/images/Alice cat.png"
+#         "Hi, I'm Alice and we at Reli AI understand that dating is complicated.We want to help. What is your name?"
+#                 }
+#     return jsonify({"message": response})
+
 @main_bp.route("/start", methods=["GET"])
 @login_required
 def start_chat():
-    # prompt = f""
-
-    # response = openai.Completion.create(
-    #     model="text-curie-001",  # or whichever model you're using
-    #     prompt=prompt,
-    #     max_tokens=500,
-    # )
-
-    # return jsonify({
-    #     "message": response.choices[0].text.strip()
-    # })
+   
 
     session.clear()  # clear the session at the start of each chat
     session["state"] = "get_name"  # set the initial state
-    response = "Hi, I'm Alice and we at Reli AI understand that dating is complicated. We want to help. What is your name?"
+    response = "Hi, I'm Alice. At Reli-AI we understand that dating is complicated. What is your name?"
     return jsonify({"message": response})
+
 
 
 
@@ -271,7 +274,7 @@ def chat():
             session["state"] = "session_end"
 
     elif session.get("state") == "question_2":
-        response = "what do you think life is about?"
+        response = "what do you think life is about? What are you looking for?"
         session["question_life"] = user_message
         session["state"] = "question_3"
 
@@ -324,6 +327,23 @@ def chat():
         response = "What does it mean to be a friend?"
         session["question_friend"] = user_message
         session["state"] = "question_13"
-        
+
+    # This last prompt will be a summary of the users answers (not sure how it will be presented yet))
+    # It may be used to generate a profile for the user, or to generate a profile for a potential match
+    # or it may return a prompt from to help users initiate a conversation with a potential match    
+    # Maybe a generated breather or story in between questions
         
     return jsonify({"message": response, "buttons": buttons})
+
+# text generation template
+ # prompt = f""
+
+    # response = openai.Completion.create(
+    #     model="text-curie-001",  # or whichever model you're using
+    #     prompt=prompt,
+    #     max_tokens=500,
+    # )
+
+    # return jsonify({
+    #     "message": response.choices[0].text.strip()
+    # })
