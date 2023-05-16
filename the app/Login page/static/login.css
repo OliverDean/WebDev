@@ -350,3 +350,58 @@ body {
               0 0 20px red;
 }
 
+#about-page {
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  position: relative;
+  background: #FFFFFF;
+  max-width: 1200px;
+  width: 100%; /* This will make the box responsive */
+  border: 1px solid black; /* added black border */
+  border-radius: 15px;
+  box-shadow: 10px 10px 30px 15px black;
+  box-sizing: border-box;
+  margin: 100px auto 10px;
+  overflow: hidden;
+  padding: 2%; /* Added padding for the content inside */
+}
+
+
+
+
+#about-page h1, #about-page h2 {
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+#about-page p {
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.6em;
+}
+
+.btn-back {
+  display: inline-block;
+  background: #4285F4;
+  padding: 12px 20px;
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: #327ad5;
+}
+
+.form-about {
+  color: #4285F4;
+  font-size: 12px;
+  text-decoration: none;
+}

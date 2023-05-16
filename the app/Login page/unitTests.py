@@ -1,24 +1,33 @@
 
-from models import User, UserSession, Question, UserQuestionAnswer
+#from models import User, UserSession, Question, UserQuestionAnswer
 import unittest
 from flask_sqlalchemy import SQLAlchemy
-from app import create_app, db
+from app import create_test_app
 import json
-
 
 
 class UserModelTest(unittest.TestCase):
     # executed prior to each test
     def setUp(self):
-        self.app = create_app('testing')
+        self.app = create_test_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        db.create_all()
+        self.db = self.app.extensions['sqlalchemy'].db
+        self.db.create_all()
+
+        from models import User, UserSession, Question, UserQuestionAnswer
+        self.User = User
+        self.UserSession = UserSession
+        self.Question = Question
+        self.UserQuestionAnswer = UserQuestionAnswer
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        self.db.session.remove()
+        self.db.drop_all()
         self.app_context.pop()
+
+    #... continue with your tests but replace db with self.db, User with self.User and so on...
+
 
     def test_create_user(self):
         """Test the creation of a User."""
@@ -65,10 +74,10 @@ class UserModelTest(unittest.TestCase):
 
     def test_check_wrong_password(self):
         """Test that checking a wrong password returns False."""
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
+        self.db.session.add(user)
+        self.db.session.commit()
         assert not user.check_password('wrong_password')
 
     def test_invalid_email(self):
@@ -145,171 +154,189 @@ class UserModelTest(unittest.TestCase):
 
     def test_non_printable_password(self):
         """Test that creating a User with a non-printable password fails."""
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         with self.assertRaises(ValueError):
             user.set_password('\x00')  # '\x00' is a non-printable character
 
     def test_create_user_without_username(self):
         """Test that creating a User without a username fails."""
-        user = User(email='test@test.com')
+        user = self.User(email='test@test.com')
         user.set_password('password')
         with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+            self.db.session.add(user)
+            self.db.session.commit()
 
     def test_create_user_without_email(self):
         """Test that creating a User without an email fails."""
-        user = User(username='test')
+        user = self.User(username='test')
         user.set_password('password')
         with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+            self.db.session.add(user)
+            self.db.session.commit()
 
     def test_create_user_without_password(self):
         """Test that creating a User without a password fails."""
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         with self.assertRaises(Exception):
-            db.session.add(user)
-            db.session.commit()
+            self.db.session.add(user)
+            self.db.session.commit()
 
     def test_set_password_after_creation(self):
         """Test setting a password after User creation."""
-        user = User(username='test', email='test@test.com')
-        db.session.add(user)
-        db.session.commit()
+        user = self.User(username='test', email='test@test.com')
+        self.db.session.add(user)
+        self.db.session.commit()
         user.set_password('password')
-        db.session.commit()
+        self.db.session.commit()
         assert user.check_password('password')
 
     def test_change_password(self):
         """Test changing a User's password."""
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
+        self.db.session.add(user)
+        self.db.session.commit()
         user.set_password('new_password')
-        db.session.commit()
+        self.db.session.commit()
         assert user.check_password('new_password')
 
     def test_check_password_with_different_case(self):
         """Test that checking a password with different case returns False."""
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
+        self.db.session.add(user)
+        self.db.session.commit()
         assert not user.check_password('PASSWORD')
 
     def test_invalid_email(self):
         """Test that creating a User with an invalid email format fails."""
-        user = User(username='test', email='invalid_email')
+        user = self.User(username='test', email='invalid_email')
         user.set_password('password')
         with self.assertRaises(ValueError):
-            db.session.add(user)
-            db.session.commit()
+            self.db.session.add(user)
+            self.db.session.commit()
 
 
 class UserSessionModelTest(unittest.TestCase):
+    # executed prior to each test
     def setUp(self):
-        self.app = create_app('testing')
+        self.app = create_test_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        db.create_all()
+        self.db = self.app.extensions['sqlalchemy'].db
+        self.self.db.create_all()
+
+        from models import User, UserSession, Question, UserQuestionAnswer
+        self.User = User
+        self.UserSession = UserSession
+        self.Question = Question
+        self.UserQuestionAnswer = UserQuestionAnswer
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        self.db.session.remove()
+        self.db.drop_all()
         self.app_context.pop()
+
 
     def test_create_session(self):
         """Test the creation of a UserSession."""
         print('Running test_create_session...')
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
-        session = UserSession(user_id=user.id)
-        db.session.add(session)
-        db.session.commit()
+        self.db.session.add(user)
+        self.db.session.commit()
+        session = self.UserSession(user_id=user.id)
+        self.db.session.add(session)
+        self.db.session.commit()
         self.assertIsNotNone(session.id)
         print('test_create_session passed.')
 
     def test_session_without_user(self):
         """Test that creating a UserSession without a User fails."""
         print('Running test_session_without_user...')
-        session = UserSession()
+        session = self.UserSession()
         with self.assertRaises(Exception):
-            db.session.add(session)
-            db.session.commit()
+            self.db.session.add(session)
+            self.db.session.commit()
         print('test_session_without_user passed.')
 
     def test_multiple_sessions_for_user(self):
         """Test that a User can have multiple sessions."""
         print('Running test_multiple_sessions_for_user...')
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        db.session.add(user)
-        db.session.commit()
-        session1 = UserSession(user_id=user.id)
-        session2 = UserSession(user_id=user.id)
-        db.session.add(session1)
-        db.session.add(session2)
-        db.session.commit()
+        self.db.session.add(user)
+        self.db.session.commit()
+        session1 = self.UserSession(user_id=user.id)
+        session2 = self.UserSession(user_id=user.id)
+        self.db.session.add(session1)
+        self.db.session.add(session2)
+        self.db.session.commit()
         self.assertIsNotNone(session1.id)
         self.assertIsNotNone(session2.id)
         print('test_multiple_sessions_for_user passed.')
 
 class UserQuestionAnswerModelTest(unittest.TestCase):
+    # executed prior to each test
     def setUp(self):
-        self.app = create_app('testing')
+        self.app = create_test_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        db.create_all()
+        self.db = self.app.extensions['sqlalchemy'].db
+        self.db.create_all()
+
+        from models import User, UserSession, Question, UserQuestionAnswer
+        self.User = User
+        self.UserSession = UserSession
+        self.Question = Question
+        self.UserQuestionAnswer = UserQuestionAnswer
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        self.db.session.remove()
+        self.db.drop_all()
         self.app_context.pop()
+
 
     def test_create_user_question_answer(self):
         """Test the creation of a UserQuestionAnswer."""
         print('Running test_create_user_question_answer...')
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        question = Question(question_type='type 1', submitted_answer='answer')
-        db.session.add(user)
-        db.session.add(question)
-        db.session.commit()
-        user_question_answer = UserQuestionAnswer(user_id=user.id, question_id=question.id, submitted_answer='answer')
-        db.session.add(user_question_answer)
-        db.session.commit()
+        question = self.Question(question_type='type 1', submitted_answer='answer')
+        self.db.session.add(user)
+        self.db.session.add(question)
+        self.db.session.commit()
+        user_question_answer = self.UserQuestionAnswer(user_id=user.id, question_id=question.id, submitted_answer='answer')
+        self.db.session.add(user_question_answer)
+        self.db.session.commit()
         self.assertIsNotNone(user_question_answer.id)
         print('test_create_user_question_answer passed.')
 
     def test_user_question_answer_without_user_or_question(self):
         """Test that creating a UserQuestionAnswer without a User or Question fails."""
         print('Running test_user_question_answer_without_user_or_question...')
-        user_question_answer = UserQuestionAnswer(submitted_answer='answer')
+        user_question_answer = self.UserQuestionAnswer(submitted_answer='answer')
         with self.assertRaises(Exception):
-            db.session.add(user_question_answer)
-            db.session.commit()
+            self.db.session.add(user_question_answer)
+            self.db.session.commit()
         print('test_user_question_answer_without_user_or_question passed.')
 
     def test_multiple_answers_for_user(self):
         """Test that a User can have multiple answers."""
         print('Running test_multiple_answers_for_user...')
-        user = User(username='test', email='test@test.com')
+        user = self.User(username='test', email='test@test.com')
         user.set_password('password')
-        question1 = Question(question_type='type 1', submitted_answer='answer1')
-        question2 = Question(question_type='type 2', submitted_answer='answer2')
-        db.session.add(user)
-        db.session.add(question1)
-        db.session.add(question2)
-        db.session.commit()
-        answer1 = UserQuestionAnswer(user_id=user.id, question_id=question1.id, submitted_answer='answer1')
-        answer2 = UserQuestionAnswer(user_id=user.id, question_id=question2.id, submitted_answer='answer2')
-        db.session.add(answer1)
-        db.session.add(answer2)
-        db.session.commit()
+        question1 = self.Question(question_type='type 1', submitted_answer='answer1')
+        question2 = self.Question(question_type='type 2', submitted_answer='answer2')
+        self.db.session.add(user)
+        self.db.session.add(question1)
+        self.db.session.add(question2)
+        self.db.session.commit()
+        answer1 = self.UserQuestionAnswer(user_id=user.id, question_id=question1.id, submitted_answer='answer1')
+        answer2 = self.UserQuestionAnswer(user_id=user.id, question_id=question2.id, submitted_answer='answer2')
+        self.db.session.add(answer1)
+        self.db.session.add(answer2)
+        self.db.session.commit()
         self.assertIsNotNone(answer1.id)
         self.assertIsNotNone(answer2.id)
         print('test_multiple_answers_for_user passed.')

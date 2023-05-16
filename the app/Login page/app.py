@@ -12,42 +12,43 @@ from .extensions import db
 migrate = Migrate()
 login_manager = LoginManager()
 
-def create_app(config_class=Config):
-    print("starting flask application...")
-    load_dotenv()
-    
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-    
-    db.init_app(app)
-    migrate.init_app(app, db)
-    login_manager.init_app(app)
-    print("database initialized...")
+# Initialize the Flask application
+app = Flask(__name__)
+app.config.from_object(Config)
+load_dotenv()
+print("starting flask application...")
 
+# Initialize the extensions
+db.init_app(app)
+migrate.init_app(app, db)
+login_manager.init_app(app)
+print("database initialized...")
 
-    
-    init_app_error(app)
-    print("error handler initialized...")
+init_app_error(app)
+print("error handler initialized...")
 
-    from .models import User, UserSession, UserQuestionAnswer, Question
-    from .routes import main_bp
+from .models import User, UserSession, UserQuestionAnswer, Question
+from .routes import main_bp
 
-    app.register_blueprint(main_bp)
-    print("blueprint registered...")
+app.register_blueprint(main_bp)
 
-    print("flask application started...")
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        print("load_user called")
-        return User.query.get(int(user_id))
+# Create the database and seed it
+with app.app_context():
+    db.create_all()  # Create database tables for our data models
+    seed_questions(app)  # seed the database
 
-    return app
-
-if __name__ == '__main__':
-    app = create_app()
+def create_test_app():
+    app.config.from_object('config.TestingConfig')  # Assuming TestingConfig is your testing config
     with app.app_context():
         db.create_all()  # Create database tables for our data models
-        seed_questions(app)  # seed the database
+        seed_questions(app)
+    return app
+
+# Run the application
+if __name__ == '__main__':
     app.run(debug=True)
     print("flask application started...")
