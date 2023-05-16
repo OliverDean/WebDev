@@ -1,21 +1,16 @@
-Flask Dating App: Discover Meaningful Connections
+Reli AI: Discover Meaningful Connections
 
-Welcome to the Flask Dating App, a revolutionary platform where cutting-edge AI technology merges with the world of online dating. Our app is built using Flask, JavaScript, Python, JSON, CSS, and HTML, creating a robust environment for connecting with like-minded individuals and embarking on meaningful relationships.
+Welcome to the beginning of reli AI, where Natural language processing and online dating intersect. 1st generation dating apps tend to overemphasize physical traits and appearance, leading to superficiality and a lack of meaningful connection. They are also tend to offer potential mates randomly and without any consideration of personality traits. 
 
-Engage in Intelligent Conversations
+The 2nd generation of dating apps use personality traits such as the myer briggs and big 5 personality tests to match users. Overall we believe this is a step in the correct direction. However, we believe we can measure personality and capability using proprietary metrics, deep learning and understanding of fundemental human psychology. 
 
-Immerse yourself in enlightening dialogues with our AI chat bot, your personal dating assistant. Our intelligent chat bot facilitates engaging and insightful conversations, offering personalized recommendations tailored to your preferences. It acts as your trusted companion, guiding you through the complexities of online connections and enhancing your overall dating experience.
+Our app is designed to be part of the initial data collection process for a larger project where users are matchmade! based on their personality traits. It provides a good opportunity to think about how to make data collection a palatable experience for the user, dating in an online context and UX design as an overall concept.
 
-Comprehensive Chat History and Connection Management
-
-Effortlessly navigate your dating journey with our app's comprehensive chat history and connection management features. Maintain a detailed record of your conversations, allowing you to revisit previous interactions, recall shared interests, and nurture connections over time. Our user-friendly interface empowers you to stay engaged and effectively manage your connections, fostering the growth of meaningful relationships.
+New advances in NLP allow for extracting greater insight from long form Q/A data formats.We are currently in the process of collecting data from users to train our model. 
 
 Safety and Privacy First
 
-We prioritize your safety and privacy above all else. Our app is designed with robust security measures to protect your personal information. We encourage you to exercise caution when sharing sensitive details and adhere to best practices for online dating, ensuring a safe and enjoyable experience for all our users.
+We understand that the nature of the data we collect demands careful security measures and online safety/privacy are key concerns.
+We aim to test extensively before any real world data collection occurs. We will ensure a safe and enjoyable experience for all users.
 
-Reach Out to Us
-
-Your experience is valuable to us, and we are committed to providing exceptional support. If you have any inquiries or require assistance, our dedicated support team is just a message away. Reach out to us through the app or visit our website for additional information, resources, and guidance.
-
-Join the Flask Dating App today and embark on an extraordinary journey of discovering meaningful connections with individuals who share your aspirations and values. Together, let's create lasting bonds in the digital realm of love and companionship.
+Technologies: Flask, JavaScript, Python, JSON, CSS, and HTML
