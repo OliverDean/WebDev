@@ -11,6 +11,7 @@ from flask_talisman import Talisman
 from werkzeug.exceptions import BadRequest
 import re
 import string
+import secrets
 
 from .models import User, UserSession, UserQuestionAnswer, Question
 from .app import db, login_manager
@@ -35,12 +36,14 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            session['user_id'] = user.id  # Store user_id in the session
-            # Create a new UserSession record
-            new_session = UserSession(user_id=user.id)
-            db.session.add(new_session)  # Add the new record to the session
-            db.session.commit()  # Commit the changes to the database
+            session['user_id'] = user.id
+            session_token = secrets.token_hex(32)  # Generate a random token
+            session['token'] = session_token  # Store the token in session
+            new_session = UserSession(user_id=user.id, token=session_token)  # Pass the token when creating a UserSession
+            db.session.add(new_session)
+            db.session.commit()
             return jsonify(status="success", message="Login successful."), 200
+
         else:
             print('Login failed. Check your username and/or password.')
             return jsonify(status="error", message="Login failed. Check your username and/or password."), 400
@@ -101,22 +104,26 @@ def register():
 
 
 @main_bp.route('/logout')
-@login_required
+# @login_required
 def logout():
-    user_session = UserSession.query.filter_by(
-        user_id=session['user_id'], logout_time=None).first()
-    if user_session:
-        user_session.logout_time = datetime.now()  # Record the logout time
-        db.session.commit()
+    try:
+        user_session = UserSession.query.filter_by(
+            user_id=session['user_id'], token=session['token'], logout_time=None).first()
+        if user_session:
+            user_session.logout_time = datetime.now()  # Record the logout time
+            db.session.commit()
 
-        # Calculate the session duration in seconds
-        user_session.duration = (
-            user_session.logout_time - user_session.login_time).total_seconds()
-        db.session.commit()
-
-    logout_user()
-    flash('You have been logged out.', category='success')
-    return redirect(url_for('index'))
+            # Calculate the session duration in seconds
+            user_session.duration = (
+                user_session.logout_time - user_session.login_time).total_seconds()
+            db.session.commit()
+    except Exception as e:
+        print(f"An error occurred during logout: {e}")
+    finally:
+        session.pop('token', None)  # Remove the session token
+        logout_user()  # This will also remove user_id from session
+        flash('You have been logged out.', category='success')
+        return render_template('index.html')
 
 
 @main_bp.route('/users')
@@ -153,10 +160,8 @@ def chatbot_login():
 
 @main_bp.route("/start", methods=["GET"])
 @login_required
-def start_chat():
-   
-
-    session.clear()  # clear the session at the start of each chat
+def start_chat():   
+    # session.clear()  # clear the session at the start of each chat
     session["state"] = "get_name"  # set the initial state
     response = "Hi, I'm Alice. At Reli-AI we understand that dating is complicated. What is your name?"
     return jsonify({"message": response})

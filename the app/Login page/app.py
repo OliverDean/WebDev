@@ -36,15 +36,14 @@ app.register_blueprint(main_bp)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Create the database and seed it
 with app.app_context():
-    db.create_all()  # Create database tables for our data models
+    db.create_all()  # create the database
     seed_questions(app)  # seed the database
 
 def create_test_app():
-    app.config.from_object('config.TestingConfig')  # Assuming TestingConfig is your testing config
+    app.config.from_object('config.TestingConfig') 
     with app.app_context():
-        db.create_all()  # Create database tables for our data models
+        db.create_all() 
         seed_questions(app)
     return app
 

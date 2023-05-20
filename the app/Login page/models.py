@@ -42,6 +42,7 @@ class User(UserMixin, db.Model):
 class UserSession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    token = db.Column(db.String(64), unique=True, nullable=False)
     login_time = db.Column(db.DateTime, default=func.now())
     logout_time = db.Column(db.DateTime, nullable=True)
     duration = db.Column(db.Integer, nullable=True)
