@@ -12,6 +12,7 @@ from werkzeug.exceptions import BadRequest
 import re
 import string
 import secrets
+from sqlalchemy import or_, and_
 
 from .models import User, UserSession, UserQuestionAnswer, Question
 from .app import db, login_manager
@@ -166,6 +167,48 @@ def start_chat():
     response = "Hi, I'm Alice. At Reli-AI we understand that dating is complicated. What is your name?"
     return jsonify({"message": response})
 
+
+@main_bp.route("/history", methods=["GET", "POST"])
+@login_required
+def history():
+    search_term = request.args.get('q')
+
+    if request.method == "GET":
+        # Fetch the questions
+        if search_term:
+            questions = Question.query.filter(Question.question_text.contains(search_term)).all()
+        else:
+            questions = Question.query.all()
+        
+        return render_template("history.html", questions=questions, search_term=search_term)
+
+    elif request.method == "POST":
+        # Fetch the user's answers to the questions
+        if search_term:
+            user_question_answers = UserQuestionAnswer.query.filter(
+                and_(
+                    UserQuestionAnswer.user_id == current_user.id,
+                    or_(
+                        Question.question_text.contains(search_term),
+                        UserQuestionAnswer.submitted_answer.contains(search_term)
+                    )
+                )
+            ).all()
+        else:
+            user_question_answers = UserQuestionAnswer.query.filter_by(user_id=current_user.id).all()
+       
+        return render_template("history.html", user_question_answers=user_question_answers, search_term=search_term)
+ 
+@main_bp.route("/history/delete/<int:answer_id>", methods=["GET", "POST"])
+@login_required
+def delete_answer(answer_id):
+    answer = UserQuestionAnswer.query.get(answer_id)
+    if answer and answer.user_id == current_user.id:
+        db.session.delete(answer)
+        db.session.commit()
+        return redirect(url_for('history'))
+    else:
+        return jsonify({"error": "Answer not found or user not authorized"}), 404
 
 
 
