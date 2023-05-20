@@ -47,7 +47,6 @@ for i in range(num_runs):
         register_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[type="submit"]#register-button')))
 
         driver.execute_script("arguments[0].click();", register_button)
-        register_button.click()
         # Wait for the alert to be present
         WebDriverWait(driver, 3).until(EC.alert_is_present())
         alert = Alert(driver)
