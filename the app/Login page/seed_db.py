@@ -11,7 +11,7 @@ def seed_questions(app):
                 # Seed the database with initial questions.
                 questions = [
                     "Okay, great! Let's begin at the beginning. Who named you? and why that name? Tells us what you can.",
-                    "What do you think life is about?",
+                    "what do you think life is about? What are you looking for?",
                     "What is love?",
                     "What does it mean to be a parent?",
                     "What defines you as a person?",
