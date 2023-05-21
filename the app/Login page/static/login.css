@@ -405,3 +405,18 @@ body {
   font-size: 12px;
   text-decoration: none;
 }
+
+#login-error {
+  color: #fff;
+  background-color: #2b496b; /* Red */
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}

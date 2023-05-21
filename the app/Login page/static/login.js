@@ -87,7 +87,6 @@ $(document).ready(function () {
     });
   });
   
-
   $("#login-form").on("submit", function (e) {
     e.preventDefault();
     const formData = $(this).serialize();
@@ -96,12 +95,14 @@ $(document).ready(function () {
         window.location.href = "/chatbot";
       } else {
         console.log('incorrect login');
-        alert(response.message);
+        // Show the login error message
+        $('#login-error').show();
+        // Optionally, hide the error message after a few seconds:
+        setTimeout(function() {
+          $('#login-error').hide();
+        }, 5000); // Hide after 5 seconds
       }
     });
   });
-
-  $(document).on("submit", "#register-form", function (e) {
-
-  });
 });
+
