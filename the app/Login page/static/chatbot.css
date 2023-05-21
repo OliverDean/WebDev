@@ -440,5 +440,21 @@ body {
   background-color: #45a049;
 }
 
+#login-error {
+  color: #fff;
+  background-color: #f44336; /* Red */
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 5px;
+  /* Center the popup */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure it sits on top */
+  text-align: center;
+  /* Additional styling to make it look a bit better */
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
 
 /* chatbot styling end */
