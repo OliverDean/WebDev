@@ -1,0 +1,9 @@
+ngrok config add-authtoken 2Q5Xio7aszr9MOWENb2WSAAv4L2_6b9m7Uiy2aM6TjRRATwEh
+ngrok help
+ngrok http 5000
+
+ctrl click the link
+or copy it and go to it on mobile deivce 
+looks somehting like this
+Web Interface                 http://127.0.0.1:4041
+Forwarding                    https://f0fb-130-95-254-161.ngrok-free.app -> http://localhost:5000  
