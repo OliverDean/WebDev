@@ -302,7 +302,7 @@ def chat():
                 # Create a new question if it doesn't exist
                 question = Question.query.filter_by(question_text='unique dating profile').first()
                 if question is None:
-                    question = Question(question_text='unique dating profile')
+                    question = Question(question_text='unique dating profile', question_type='type1')
                     db.session.add(question)
                     db.session.commit()  # commit needed to assign an ID to the new question
 

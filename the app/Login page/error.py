@@ -1,4 +1,5 @@
 from flask import render_template
+from flask_login import current_user, logout_user
 from . import app, db
 
 def init_app_error(app):
@@ -15,6 +16,8 @@ def not_found_error(error):
 
 @app.errorhandler(500)
 def internal_error(error, _):
+    if current_user.is_authenticated:
+        logout_user()  # Log out the current user
     db.session.rollback()
     return render_template('error.html', error_code=500, error_message='Internal server error\n Thats an oops'), 500
 
