@@ -26,9 +26,6 @@ class UserModelTest(unittest.TestCase):
         self.db.drop_all()
         self.app_context.pop()
 
-    #... continue with your tests but replace db with self.db, User with self.User and so on...
-
-
     def test_create_user(self):
         """Test the creation of a User."""
         with self.app.test_client() as c:
