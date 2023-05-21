@@ -14,6 +14,10 @@ flask db init
 flask db migrate -m "test"
 flask db upgrade
 
+
+Use git reset command to unstage any staged (but not committed) changes, and revert your tracked files back to their state at the last commit:
+git reset --hard
+
 ___
 Database Migration on StartUp
 
