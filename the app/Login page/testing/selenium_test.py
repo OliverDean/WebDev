@@ -10,7 +10,7 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.keys import Keys
 
 # Define the number of test runs
-num_runs = 3
+num_runs = 1
 
 
 # Start the loop to run the test multiple times

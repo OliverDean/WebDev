@@ -307,8 +307,8 @@ body {
   100% { transform: scale(1); }
 }
 
-.form {
-  z-index: 15;
+.form, .form-error {
+  z-index: 1;
   position: relative;
   background: #FFFFFF;
   width: 500px;
@@ -406,7 +406,7 @@ body {
   text-decoration: none;
 }
 
-#login-error {
+#login-error, .form-container {
   color: #fff;
   background-color: #2b496b; /* Red */
   margin-bottom: 15px;

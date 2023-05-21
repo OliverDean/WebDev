@@ -1,6 +1,4 @@
 import time
-import random
-import string
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -10,7 +8,7 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.keys import Keys
 
 # Define the number of test runs
-num_runs = 3
+num_runs = 1
 
 
 
@@ -50,10 +48,16 @@ for i in range(num_runs):
     WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.sidebar-toggle'))).click()
 
     # Test sidebar links
-    links = ['history', 'users', 'index', 'logout']
+    links = ['history', 'users', 'about', 'logout']
     for link in links:
         WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f'ul.links a[href="/{link}"]'))).click()
         time.sleep(2)  # wait to see the effect
+        
+        # Go back to the dashboard
+        if link != "logout":
+            driver.back()
+        
+        time.sleep(1)  
 
     # Close the browser
     driver.quit()

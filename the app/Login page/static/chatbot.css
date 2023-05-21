@@ -239,7 +239,7 @@ Sidebar
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 70%;
   height: 100%;
   background: var(--clr-white);
   display: grid;
@@ -248,6 +248,8 @@ Sidebar
   box-shadow: var(--clr-red-dark);
   transition: var(--transition);
   transform: translate(-100%);
+  z-index: 100;
+  border-right: 2px solid #4285F4;
 }
 .show-sidebar {
   transform: translate(0);
@@ -271,6 +273,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vw;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -440,5 +443,21 @@ body {
   background-color: #45a049;
 }
 
+#login-error {
+  color: #fff;
+  background-color: #f44336; /* Red */
+  margin-bottom: 15px;
+  padding: 20px;
+  border-radius: 5px;
+  /* Center the popup */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure it sits on top */
+  text-align: center;
+  /* Additional styling to make it look a bit better */
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
 
 /* chatbot styling end */
