@@ -166,10 +166,10 @@ Sidebar
   color: var(--clr-primary-5);
   transition: var(--transition);
   cursor: pointer;
-  animation: bounce 2s ease-in-out infinite;
 }
 .sidebar-toggle:hover {
   color: var(--clr-primary-7);
+  animation: bounce 2s ease-in-out infinite;
 }
 @keyframes bounce {
   0% {
@@ -395,10 +395,10 @@ body {
 .chat-input input {
   margin-top: auto;
   flex-grow: 1;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border-radius: 20px;
   border: none;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 .chat-input button {
@@ -413,7 +413,7 @@ body {
   font-size: inherit;
   font-weight: 500;
   line-height: inherit;
-  text-transform: uppercase;
+  text-transform: capitalize;
   cursor: pointer;
   transition: all 0.3s ease;
 }

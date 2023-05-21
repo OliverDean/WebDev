@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
@@ -17,8 +18,8 @@
       <div class="form-header">
         <h1>Sign in</h1>
       </div>
-      <div id="login-error" style="display: none;">
-        Login failed. Please check your username and/or password.
+      <div id="login-error" class="alert alert-danger" style="display: none;">
+        Invalid username or password. Please try again.
       </div>
       <div class="form-content">
         <form action="/login" method="POST" id="login-form">
@@ -120,6 +121,8 @@
 </div>
 <!-- END RESET PASSWORD FORM -->
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='login.js') }}"></script>
 </body>
 </html>
