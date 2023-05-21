@@ -48,16 +48,6 @@ def create_test_app():
         seed_questions(app)
     return app
 
-# def start_ngrok():
-#     ngrok_tunnel = ngrok.connect(5000)
-#     print('Tunnel URL:', ngrok_tunnel.public_url)
-
-# # Run the application in production mode
-# if __name__ == '__main__':
-#     start_ngrok()
-#     print("flask application started...")
-#     app.run()
-
 if __name__ == '__main__':
     app.run(debug=True)
     print("flask application started...")

@@ -84,14 +84,14 @@ Feedback and Interactions: Consider providing feedback to the user about the upl
 ----
 
 
-implement history
+implement history done 
 search userquestionanswer databases
 look into flask ngrok done
-css and java script review
-unit testing
+css and java script review meh 
+unit testing done ish
 additional selenium test done 
-chat questions rout work
+chat questions rout work done 
 login popup done
 
-make api calls to chatgpt and or dali
+make api calls to chatgpt and or dali done 
 

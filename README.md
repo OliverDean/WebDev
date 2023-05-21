@@ -1,65 +1,67 @@
 # WebDev
 CITS3403 agile web development project
 
-Work done by Oliver Dean 21307131 
+Work done by:
+Oliver, 21307131 
 and
-Nick 20262846
-
-
-
-manage.py is for database updating and merging 
-if you dont see the app.db in the Login page directory then 
-flask db init
-    if it is there but doesnt work try
-flask db migrate -m "test"
-flask db upgrade
-
-
-Use git reset command to unstage any staged (but not committed) changes, and revert your tracked files back to their state at the last commit:
-git reset --hard
-
-___
-Database Migration on StartUp
-
-If the database isn't working on startup delete the migrations folder and the app.db file and run 3 commands in order:
-flask db init
-flask db migrate
-flask db upgrade
-
-Need to find a way to migrate them properly on startup...
-___
-
-___
-Controls and Exceptions
-i need to add some controls to the database as currently you can make a user profile with username r password r email r ...
-
-login.html doesnt exist but is called by app.py might need to make a base case html
-ERROR in app: Exception on /login [GET]
-jinja2.exceptions.TemplateNotFound: login.html
-___
-
-___
-Report Completion
-
-need to flesh out these
+Nick, 20262846
 
 
 _the purpose of the web application, explaining the its design and use._
 
+This Flask application is designed as a dating co pilot, it consists of multiple views that culminate in a chat tree with a bot that produces a dating profile.
+
+
+
+
+In building our Flask application, we embraced Agile principles. We divided the project into a series of manageable sprints, on different components of the application. This approach allowed for faster testing and adaptations.
+
+Throughout the process, clear and regular communication between the team was key to our success. After each sprint, we had meetings and discussions both in person and over discord.
+
+Our application's features and design underwent constant evolution, as we were open to changes in response to the insights gained from iterative development and testing.
+
+We also adopted continuous integration and continuous deployment. These allowed us to integrate regular code updates and conduct automated tests, minimizing errors.
+
+Overall, using Agile principles allowed us to develop a high-quality, robust Flask application that that is modular and something we are both proud of.
+
+This was a very challenging but rewarding project we both learnt a great deal.
 
 _the architecture of the web application._
 
 
 _describe how to launch the web application._
 
+How to set up the flask app, in a terminal please write the following:
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install -r requirements.txt
+
+// Please run this from the Login page directory
+flask run 
 
 _describe some unit tests for the web application, and how to run them._
 
+Running the selenium testing. from the Login page directory please run
+
+python autoSelenium.py
+
+For the unit testing please run 
+
+python -m unittest testing.unitTests
+
+If there is an error with the db seeding please run these commands in order
+
+rm app.db
+rm -r migrations/
+flask db init
+flask db migrate -m "upgrading"
+flask db upgrade
+
+
 
 _Include commit logs, showing contributions and review from both contributing students_
-___
 
-___
-Persistent bugs
-
-Sometimes venv will simply not activate no matter what you try. Delete and restore the venv folder from recycle bin. This is a bug with venv and not the code.
+commit logs can be found in the log.txt file in this directory.
