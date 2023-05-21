@@ -10,17 +10,17 @@ def seed_questions(app):
             if not Question.query.first():
                 # Seed the database with initial questions.
                 questions = [
-                    "Okay, great! Let's begin at the beginning. Who named you? and why that name? Tells us what you can.",
-                    "what do you think life is about? What are you looking for?",
-                    "What is love?",
+                    "Okay, great! Let's begin,\n may i please collect some information about you.\n What is the origin of your name?",
+                    "what do you think life is about?",
+                    "What does love mean for you?",
                     "What does it mean to be a parent?",
                     "What defines you as a person?",
                     "What is your favourite thing about yourself?",
                     "What is your least favourite thing about yourself?",
                     "Describe your ideal day alone.",
                     "Describe your ideal day with others.",
-                    "What is your favourite thing to cook/eat?",
-                    "Do you like animals? If so, what is your favourite animal?",
+                    "What is your favourite thing to eat?",
+                    "Do you have a favorite animal?",
                     "What does it mean to be a friend?",
                 ]
                 question_type = 'type 1'

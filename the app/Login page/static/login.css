@@ -307,21 +307,18 @@ body {
   100% { transform: scale(1); }
 }
 
-.form, .form-error {
-  z-index: 1;
+.form {
+  z-index: 15;
   position: relative;
   background: #FFFFFF;
-  width: 100%;
-  height: 100%;
+  width: 500px;
   border-radius: 15px;
-  border: 4px solid rgb(50, 27, 255);
-  color: rgba(0, 0, 0, 0.6);
+  border: 10px solid red;
   box-shadow: 0.2px 1px 1px 7px rgb(24, 24, 26);
   box-sizing: border-box;
-  margin: 0; 
+  margin: 100px auto 10px;
   overflow: hidden;
   animation: rainbow 16s linear infinite;
-  padding: 20px;
 }
 
 .form:before,
@@ -429,4 +426,21 @@ body {
   height: 90%;
   max-width: 800px;
   max-height: 600px;
+}
+
+.form-error {
+  z-index: 1;
+  position: relative;
+  background: #FFFFFF;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  border: 4px solid rgb(50, 27, 255);
+  color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0.2px 1px 1px 7px rgb(24, 24, 26);
+  box-sizing: border-box;
+  margin: 0; 
+  overflow: hidden;
+  animation: rainbow 16s linear infinite;
+  padding: 20px;
 }

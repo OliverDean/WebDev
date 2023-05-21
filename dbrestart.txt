@@ -1,5 +1,0 @@
-rm app.db
-rm -r migrations/
-flask db init
-flask db migrate -m "upgrading"
-flask db upgrade

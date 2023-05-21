@@ -1,6 +1,9 @@
 {% extends "base.html" %} {% block head %}
-<link  rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-<link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+/>
+<link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='history.js') }}"></script>
 {% endblock %} {% block title %} History {% endblock %} {% block content %}
@@ -26,7 +29,7 @@
   <!-- social media -->
   <ul class="social-icons">
     <li>
-      <a href="https://www.twitter.com">
+      <a href="https://www.facebook.com">
         <i class="fab fa-facebook"></i>
       </a>
     </li>
@@ -36,45 +39,32 @@
       </a>
     </li>
     <li>
-      <a href="https://www.twitter.com">
+      <a href="https://www.behance.com">
         <i class="fab fa-behance"></i>
       </a>
     </li>
     <li>
-      <a href="https://www.twitter.com">
+      <a href="https://www.linkedin.com">
         <i class="fab fa-linkedin"></i>
-      </a>
-    </li>
-    <li>
-      <a href="https://www.twitter.com">
-        <i class="fab fa-sketch"></i>
       </a>
     </li>
   </ul>
 </aside>
-<div id="body"> 
-    <div class="chat-box">
-        <div class="chat-input">
-            <input type="text" id="searchInput" placeholder="Search..." />
-        </div>
-        <div id="questions">
-        {% for question in questions %}
-        <div class="question-block form">
-            <h2>{{ question.question_text }}</h2>
-            <p>{{ question.created_at }}</p>
-        </div>
-        {% endfor %}
-        </div>
-
-        <div id="answers">
-        {% for answer in user_question_answers %}
-        <div class="answer-block">
-            <h2>Your answer: {{ answer.submitted_answer }}</h2>
-            <p>Submitted at: {{ answer.created_at }}</p>
-        </div>
-        {% endfor %}
-        </div>
+<div id="body">
+  <div class="chat-box">
+    <div class="chat-input">
+      <input type="text" id="searchInput" placeholder="Search..." />
     </div>
+    <div id="qa_blocks">
+      {% for question, answer in zip(questions, user_question_answers) %}
+      <div class="qa-block form">
+        <h2>Question: {{ question.question_text }}</h2>
+        <h2>Your answer: {{ answer.submitted_answer }}</h2>
+        <p>Submitted at: {{ answer.created_at }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}
