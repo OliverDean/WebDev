@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block head %}
+<link  rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='history.js') }}"></script>
+{% endblock %} {% block title %} History {% endblock %} {% block content %}
+<button class="sidebar-toggle">
+  <i class="fas fa-bars"></i>
+</button>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <button class="close-btn"><i class="fas fa-times"></i></button>
+  </div>
+  <!-- links -->
+  <ul class="links">
+    <li>
+      <a href="/history">History</a>
+    </li>
+    <li>
+      <a href="/users">Users</a>
+    </li>
+    <li>
+      <a href="/index">Index</a>
+    </li>
+    <li>
+      <a href="/logout">Logout</a>
+    </li>
+  </ul>
+  <!-- social media -->
+  <ul class="social-icons">
+    <li>
+      <a href="https://www.twitter.com">
+        <i class="fab fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.twitter.com">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.twitter.com">
+        <i class="fab fa-behance"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.twitter.com">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.twitter.com">
+        <i class="fab fa-sketch"></i>
+      </a>
+    </li>
+  </ul>
+</aside>
+<div class="form">
+    <input type="text" id="searchInput" placeholder="Search..." />
+  </div>
+<div id="questions">
+  {% for question in questions %}
+  <div class="question-block form">
+    <h2>Question: {{ question.question_text }}</h2>
+    <p>Submitted at: {{ question.created_at }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<div id="answers">
+  {% for answer in user_question_answers %}
+  <div class="answer-block">
+    <h2>Your answer: {{ answer.submitted_answer }}</h2>
+    <p>Submitted at: {{ answer.created_at }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

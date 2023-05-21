@@ -135,3 +135,8 @@ closeBtn.addEventListener("click", function () {
   sidebar.classList.remove("show-sidebar");
 });
 // Sidebar functionality end
+
+function handleDragDropArea(showDropArea) {
+  // TODO: implement functionality for drag-drop area
+  console.log('Called handleDragDropArea with', showDropArea);
+}
