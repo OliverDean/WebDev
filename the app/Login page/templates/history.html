@@ -55,24 +55,29 @@
     </li>
   </ul>
 </aside>
-<div class="form">
-    <input type="text" id="searchInput" placeholder="Search..." />
-  </div>
-<div id="questions">
-  {% for question in questions %}
-  <div class="question-block form">
-    <h2>Question: {{ question.question_text }}</h2>
-    <p>Submitted at: {{ question.created_at }}</p>
-  </div>
-  {% endfor %}
+<div id="body"> 
+    <div class="chat-box">
+        <div class="form">
+            <input type="text" id="searchInput" placeholder="Search..." />
+        </div>
+        <div id="questions">
+        {% for question in questions %}
+        <div class="question-block form">
+            <h2>{{ question.question_text }}</h2>
+            <p>{{ question.created_at }}</p>
+        </div>
+        {% endfor %}
+        </div>
+
+        <div id="answers">
+        {% for answer in user_question_answers %}
+        <div class="answer-block">
+            <h2>Your answer: {{ answer.submitted_answer }}</h2>
+            <p>Submitted at: {{ answer.created_at }}</p>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
 </div>
 
-<div id="answers">
-  {% for answer in user_question_answers %}
-  <div class="answer-block">
-    <h2>Your answer: {{ answer.submitted_answer }}</h2>
-    <p>Submitted at: {{ answer.created_at }}</p>
-  </div>
-  {% endfor %}
-</div>
 {% endblock %}
