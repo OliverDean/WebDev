@@ -10,8 +10,6 @@ from selenium.webdriver.common.keys import Keys
 # Define the number of test runs
 num_runs = 1
 
-
-
 # Additional runs for chat interaction
 for i in range(num_runs):
     start_time = time.time()  # Record the start time
@@ -48,10 +46,10 @@ for i in range(num_runs):
     WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button.sidebar-toggle'))).click()
 
     # Test sidebar links
-    links = ['history', 'users', 'about', 'logout']
+    links = ['history', 'about', 'logout']
     for link in links:
         WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f'ul.links a[href="/{link}"]'))).click()
-        time.sleep(2)  # wait to see the effect
+        time.sleep(1)  # wait to see the effect
         
         # Go back to the dashboard
         if link != "logout":

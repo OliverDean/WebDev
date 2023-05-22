@@ -1,0 +1,27 @@
+Details on how to set up the flask app
+
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install -r requirements.txt
+
+// Please run this from the Login page directory
+flask run 
+
+running the selenium testing. from the Login page directory please run
+
+python autoSelenium.py
+
+for the unit testing please run 
+
+python -m unittest testing.unitTests
+
+if there is an error with the db seeding please run these comands in order
+
+rm app.db
+rm -r migrations/
+flask db init
+flask db migrate -m "upgrading"
+flask db upgrade
+

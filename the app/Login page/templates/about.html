@@ -4,22 +4,24 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 {% endblock %}
 {% block content %}
+<a href="/" class="btn-back">Go back to Login screen</a>
+<a href="/chatbot" class="btn-back">Go back to Chatbot</a>
 <div id="about-page">
   <h1>Reli AI: Discover Meaningful Connections</h1>
-  <h2>Safety and Privacy First</h2>
+  <h2>Our Mission</h2>
   <p>Welcome to the beginning of reli AI, where Natural language processing and online dating intersect. 1st generation dating apps tend to overemphasize physical traits and appearance, leading to superficiality and a lack of meaningful connection. They are also tend to offer potential mates randomly and without any consideration of personality traits. </p>
-  <h2>Safety and Privacy First</h2>
-  <p>The 2nd generation of dating apps use personality traits such as the myer briggs and big 5 personality tests to match users. Overall we believe this is a step in the correct direction. However, we believe we can measure personality and capability using proprietary metrics, deep learning and understanding of fundemental human psychology.</p>
-  <h2>Safety and Privacy First</h2>
+  <h2>We Are Different</h2>
+  <p>The newest generation of dating apps use personality traits such as the myer briggs and big 5 personality tests to match users. Overall we believe this is a step in the correct direction. However, we at Reli AI believe that our AI can measure personality and capability using proprietary metrics, deep learning and understanding of fundemental human psychology better than any on the market.</p>
+  <h2>Future Goals</h2>
   <p>Our app is designed to be part of the initial data collection process for a larger project where users are matchmade! based on their personality traits. It provides a good opportunity to think about how to make data collection a palatable experience for the user, dating in an online context and UX design as an overall concept.</p>
 
   <h2>Safety and Privacy First</h2>
   <p>We understand that the nature of the data we collect demands careful security measures and online safety/privacy are key concerns.
     We aim to test extensively before any real world data collection occurs. We will ensure a safe and enjoyable experience for all users.</p>
 
-  <p>Technologies: Flask, JavaScript, Python, JSON, CSS, and HTML</p>
+  <p>Technologies: Flask, JavaScript, Python, JSON, CSS, and HTML. With help from Selenium, OpenAI, and Dallie2 for Alice the cat</p>
+  <p>Oliver 21307131 & Nick 20262846</p>
 </div>
-<a href="/" class="btn-back">Go back to Home</a>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
