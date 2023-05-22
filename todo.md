@@ -95,3 +95,20 @@ login popup done
 
 make api calls to chatgpt and or dali
 
+On Start up:
+
+manage.py is for database updating and merging 
+if you dont see the app.db in the Login page directory then 
+flask db init
+    if it is there but doesnt work try
+flask db migrate -m "test"
+flask db upgrade
+
+___
+Controls and Exceptions
+i need to add some controls to the database as currently you can make a user profile with username r password r email r ...
+
+login.html doesnt exist but is called by app.py might need to make a base case html
+ERROR in app: Exception on /login [GET]
+jinja2.exceptions.TemplateNotFound: login.html
+___
